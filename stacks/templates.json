@@ -1,0 +1,17 @@
+[
+  {
+    "type": 2,
+    "title": "Docs Stack - Dev",
+    "repository": {
+      "url": "https://github.com/shackofnoreturn/shackhq-docker-swarm",
+      "stackfile": "stacks/dev/docs/docker-compose.yml"
+    },
+    "env": [
+      {"name": "STACK_NAME", "default": "docs-dev"},
+      {"name": "DB_PASS", "default": "wikijs_dev"},
+      {"name": "WIKI_DOMAIN", "default": "wiki.dev.local"},
+      {"name": "DRAWIO_DOMAIN", "default": "draw.dev.local"},
+      {"name": "TRAEFIK_RESOLVER", "default": "devresolver"}
+    ]
+  }
+]
