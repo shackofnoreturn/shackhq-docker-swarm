@@ -1,17 +1,26 @@
-[
-  {
-    "type": 2,
-    "title": "Docs Stack - Dev",
-    "repository": {
-      "url": "https://github.com/shackofnoreturn/shackhq-docker-swarm",
-      "stackfile": "stacks/dev/docs/docker-compose.docs.yml"
-    },
-    "env": [
-      {"name": "STACK_NAME", "default": "docs-dev"},
-      {"name": "DB_PASS", "default": "wikijs_dev"},
-      {"name": "WIKI_DOMAIN", "default": "wiki.dev.local"},
-      {"name": "DRAWIO_DOMAIN", "default": "draw.dev.local"},
-      {"name": "TRAEFIK_RESOLVER", "default": "devresolver"}
-    ]
-  }
-]
+{
+  "version": "3",
+  "templates": [  
+    {
+      "id": 1,
+      "type": 2,
+      "title": "Docs Stack - Dev",
+      "description": "A development stack for documentation using Wiki.js and Draw.io, with Traefik as a reverse proxy.",
+      "note": "This stack is intended for development purposes only. It includes Wiki.js for collaborative documentation and Draw.io for diagram creation, both accessible via specified local domains. Traefik is configured to manage routing and SSL termination.",
+      "categories": ["Documentation", "Development", "Wiki", "Draw.io", "Traefik"],
+      "platform": ["linux"],
+      "logo": "https://raw.githubusercontent.com/shackofnoreturn/shackhq-docker-swarm/main/assets/logos/docs.png",
+      "repository": {
+        "url": "https://github.com/shackofnoreturn/shackhq-docker-swarm",
+        "stackfile": "stacks/dev/docs/docker-compose.docs.yml"
+      },
+      "env": [
+        {"name": "STACK_NAME", "label": "Stack name", "default": "docs-dev"},
+        {"name": "DB_PASS", "default": "wikijs_dev"},
+        {"name": "WIKI_DOMAIN", "default": "wiki.dev.local"},
+        {"name": "DRAWIO_DOMAIN", "default": "draw.dev.local"},
+        {"name": "TRAEFIK_RESOLVER", "default": "devresolver"}
+      ]
+    }
+  ]
+}
