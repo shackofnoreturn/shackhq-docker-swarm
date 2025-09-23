@@ -4,7 +4,7 @@
     "title": "Docs Stack - Dev",
     "repository": {
       "url": "https://github.com/shackofnoreturn/shackhq-docker-swarm",
-      "stackfile": "stacks/dev/docs/docker-compose.docs..yml"
+      "stackfile": "stacks/dev/docs/docker-compose.docs.yml"
     },
     "env": [
       {"name": "STACK_NAME", "default": "docs-dev"},
