@@ -1,0 +1,54 @@
+services:
+  wikijs:
+    image: ghcr.io/requarks/wiki:2
+    restart: unless-stopped
+    depends_on:
+      - wikidb
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: wikidb
+      DB_PORT: 5432
+      DB_USER: wikijs
+      DB_PASS: ${DB_PASS}
+      DB_NAME: wikijs
+    volumes:
+      - wikijs-data:/data
+    networks:
+      - docs-net
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.wikijs.rule=Host(`${WIKI_DOMAIN}`)"
+    #   - "traefik.http.routers.wikijs.entrypoints=websecure"
+    #   - "traefik.http.routers.wikijs.tls.certresolver=${TRAEFIK_RESOLVER}"
+    #   - "traefik.http.services.wikijs.loadbalancer.server.port=3000"
+
+  wikidb:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: wikijs
+      POSTGRES_USER: wikijs
+      POSTGRES_PASSWORD: ${DB_PASS}
+    volumes:
+      - wikidb-data:/var/lib/postgresql/data
+    networks:
+      - docs-net
+
+  drawio:
+    image: jgraph/drawio
+    restart: unless-stopped
+    networks:
+      - docs-net
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.drawio.rule=Host(`${DRAWIO_DOMAIN}`)"
+    #   - "traefik.http.routers.drawio.entrypoints=websecure"
+    #   - "traefik.http.routers.drawio.tls.certresolver=${TRAEFIK_RESOLVER}"
+    #   - "traefik.http.services.drawio.loadbalancer.server.port=8080"
+
+volumes:
+  wikijs-data:
+  wikidb-data:
+
+networks:
+  docs-net:

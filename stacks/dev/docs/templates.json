@@ -1,0 +1,42 @@
+[
+  {
+    "type": 2,
+    "title": "Documentation Stack (Wiki.js + Draw.io)",
+    "description": "Central documentation portal with Wiki.js, PostgreSQL, and Draw.io.",
+    "categories": ["Documentation", "IT"],
+    "platform": "swarm",
+    "logo": "https://static.requarks.io/logo/wikijs.svg",
+    "note": "Deploys Wiki.js + PostgreSQL + Draw.io. Traefik labels are commented out — enable them if you want ingress.",
+    "repository": {
+      "url": "https://github.com/shackofnoreturn/shackhq-docker-swarm#",
+      "stackfile": "stacks/dev/docs/docker-compose.docs.yml"
+    },
+    "env": [
+      {
+        "name": "STACK_NAME",
+        "label": "Stack name",
+        "default": "docs"
+      },
+      {
+        "name": "WIKI_DOMAIN",
+        "label": "Wiki.js domain",
+        "default": "wiki.dev.shackofnoreturn.com"
+      },
+      {
+        "name": "DRAWIO_DOMAIN",
+        "label": "Draw.io domain",
+        "default": "draw.dev.shackofnoreturn.com"
+      },
+      {
+        "name": "DB_PASS",
+        "label": "Postgres password",
+        "default": "wikijs_pass"
+      },
+      {
+        "name": "TRAEFIK_RESOLVER",
+        "label": "Traefik certresolver name",
+        "default": "myresolver"
+      }
+    ]
+  }
+]

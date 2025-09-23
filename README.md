@@ -1,2 +1,2 @@
-# shackhq-docker-swarm
-All persona docker swarm projects
+# ShackHQ Docker Swarm
+All personal docker swarm projects
