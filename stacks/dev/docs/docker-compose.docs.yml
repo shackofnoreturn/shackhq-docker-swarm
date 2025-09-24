@@ -1,7 +1,18 @@
 services:
+  wikidb:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: wikijs
+      POSTGRES_USER: wikijs
+      POSTGRES_PASSWORD: ${DB_PASS}
+    logging:
+      driver: none
+    restart: unless-stopped
+    volumes:
+      - wikidb-data:/var/lib/postgresql/data
+
   wikijs:
     image: ghcr.io/requarks/wiki:2
-    restart: unless-stopped
     depends_on:
       - wikidb
     environment:
@@ -11,10 +22,22 @@ services:
       DB_USER: wikijs
       DB_PASS: ${DB_PASS}
       DB_NAME: wikijs
-    volumes:
-      - wikijs-data:/data
-    networks:
-      - docs-net
+      # Database SSL/HTTPS support
+      # DB_SSL: true
+      # DB_SSL_CA: /path/to/ca.pem
+
+      # Let's Encrypt support 
+      #  Exposed HTTPS port is 3443
+      #  Both HTTP and HTTPS ports must be exposed when using Let's Encrypt
+      # SSL_ACTIVE: true
+      # LETSENCRYPT_DOMAIN: wiki.example.com
+      # LETSENCRYPT_EMAIL:
+      
+      # When running multiple replicas
+      # HA_ACTIVE: true
+    restart: unless-stopped
+    ports:
+      - 80:3000
     # labels:
     #   - "traefik.enable=true"
     #   - "traefik.http.routers.wikijs.rule=Host(`${WIKI_DOMAIN}`)"
@@ -22,23 +45,9 @@ services:
     #   - "traefik.http.routers.wikijs.tls.certresolver=${TRAEFIK_RESOLVER}"
     #   - "traefik.http.services.wikijs.loadbalancer.server.port=3000"
 
-  wikidb:
-    image: postgres:15
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: wikijs
-      POSTGRES_USER: wikijs
-      POSTGRES_PASSWORD: ${DB_PASS}
-    volumes:
-      - wikidb-data:/var/lib/postgresql/data
-    networks:
-      - docs-net
-
   drawio:
     image: jgraph/drawio
     restart: unless-stopped
-    networks:
-      - docs-net
     # labels:
     #   - "traefik.enable=true"
     #   - "traefik.http.routers.drawio.rule=Host(`${DRAWIO_DOMAIN}`)"
@@ -47,8 +56,4 @@ services:
     #   - "traefik.http.services.drawio.loadbalancer.server.port=8080"
 
 volumes:
-  wikijs-data:
   wikidb-data:
-
-networks:
-  docs-net:
