@@ -2,32 +2,45 @@
   "version": "3",
   "templates": [
     {
-      "id": 146,
-      "categories": [
-        "Notesserver"
-      ],
-      "description": "Wikijs A modern, lightweight and powerful wiki app built on NodeJS.",
-      "image": "linuxserver/wikijs:latest",
-      "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/wikijs.png",
-      "name": "Wikijs",
+      "id": 1,
+      "type": 2,
+      "title": "Documentation Stack (Wiki.js + Draw.io)",
+      "description": "Central documentation portal with Wiki.js, PostgreSQL, and Draw.io",
+      "categories": [ "Documentation" ],
       "platform": "linux",
-      "ports": [
-        "3100:3000/tcp"
-      ],
-      "restart_policy": "unless-stopped",
-      "title": "Wikijs",
-      "type": 1,
-      "volumes": [
+      "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/wikijs.png",
+      "note": "Deploys Wiki.js + PostgreSQL + Draw.io. Traefik labels are commented out, enable them later.",
+      "repository": {
+        "url": "https://github.com/shackofnoreturn/shackhq-docker-swarm",
+        "stackfile": "stacks/dev/docs/docker-compose.docs.yml"
+      },
+      "env": [
         {
-          "bind": "/portainer/Files/AppData/Config/Wikijs",
-          "container": "/config"
+          "name": "STACK_NAME",
+          "label": "Stack name",
+          "default": "docs"
         },
         {
-          "bind": "/portainer/Files/AppData/Config/Wikijs/data",
-          "container": "/data"
+          "name": "WIKI_DOMAIN",
+          "label": "Wiki.js domain",
+          "default": "wiki.example.com"
+        },
+        {
+          "name": "DRAWIO_DOMAIN",
+          "label": "Draw.io domain",
+          "default": "draw.example.com"
+        },
+        {
+          "name": "DB_PASS",
+          "label": "Postgres password",
+          "default": "wikijs_pass"
+        },
+        {
+          "name": "TRAEFIK_RESOLVER",
+          "label": "Traefik certresolver name",
+          "default": "myresolver"
         }
-      ],
-      "maintainer": " https://github.com/mycroftwilde/portainer_templates/"
+      ]
     }
   ]
 }
