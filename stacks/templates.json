@@ -10,7 +10,7 @@
       "platform": "linux",
       "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/wikijs.png",
       "note": "Deploys Wiki.js + PostgreSQL + Draw.io. Traefik labels are commented out, enable them later.",
-      "name": "Documentation Stack",
+      "name": "documentation-stack",
       "repository": {
         "url": "https://github.com/shackofnoreturn/shackhq-docker-swarm",
         "stackfile": "stacks/dev/docs/docker-compose.docs.yml"
