@@ -37,7 +37,9 @@ services:
       # HA_ACTIVE: true
     restart: unless-stopped
     ports:
-      - 80:3000
+      - target: 3000
+        published: 3000
+        protocol: tcp
     # labels:
     #   - "traefik.enable=true"
     #   - "traefik.http.routers.wikijs.rule=Host(`${WIKI_DOMAIN}`)"
