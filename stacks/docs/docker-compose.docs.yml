@@ -1,71 +1,81 @@
 services:
-  wiki:
-    image: requarks/wiki:latest
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: wikijs
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: wiki
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - docs_net
     deploy:
       replicas: 1
       placement:
         constraints:
           - node.role == manager
           - node.labels.node_id == 4
+
+  wiki:
+    image: requarks/wiki:2
+    depends_on:
+      - db
     environment:
       DB_TYPE: postgres
       DB_HOST: db
       DB_PORT: 5432
       DB_USER: wikijs
       DB_PASS: ${DB_PASS}
-      DB_NAME: wikijs
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db
+      DB_NAME: wiki
     networks:
       - docs_net
-    # Uncomment Traefik labels if you have Traefik set up
-    # labels:
-    #   - "traefik.enable=true"
-    #   - "traefik.http.routers.wiki.rule=Host(`${WIKI_DOMAIN}`)"
-    #   - "traefik.http.services.wiki.loadbalancer.server.port=3000"
-    #   - "traefik.http.routers.wiki.tls.certresolver=${TRAEFIK_RESOLVER}"
+      # - traefik
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+          - node.labels.node_id == 4
+      labels:
+        # ---- Traefik (enable once your proxy is ready) ----
+        # - "traefik.enable=true"
+        # - "traefik.http.routers.wiki.rule=Host(`${WIKI_DOMAIN}`)"
+        # - "traefik.http.services.wiki.loadbalancer.server.port=3000"
+        # - "traefik.http.routers.wiki.entrypoints=web"
+        # - "traefik.http.routers.wiki.tls.certresolver=${TRAEFIK_RESOLVER}"
+
+    # ---- Temporary host port for quick testing (remove in prod) ----
+    ports:
+      - "8085:3000"
 
   drawio:
-    image: jgraph/drawio:latest
+    image: jgraph/drawio:22.1.0
+    networks:
+      - docs_net
+      # - traefik
     deploy:
       replicas: 1
       placement:
         constraints:
           - node.role == manager
           - node.labels.node_id == 4
-    ports:
-      - "8085:8080"
-    networks:
-      - docs_net
-    # labels:
-    #   - "traefik.enable=true"
-    #   - "traefik.http.routers.drawio.rule=Host(`${DRAWIO_DOMAIN}`)"
-    #   - "traefik.http.services.drawio.loadbalancer.server.port=8080"
-    #   - "traefik.http.routers.drawio.tls.certresolver=${TRAEFIK_RESOLVER}"
+      labels:
+        # ---- Traefik (enable once your proxy is ready) ----
+        # - "traefik.enable=true"
+        # - "traefik.http.routers.drawio.rule=Host(`${DRAWIO_DOMAIN}`)"
+        # - "traefik.http.services.drawio.loadbalancer.server.port=8080"
+        # - "traefik.http.routers.drawio.entrypoints=web"
+        # - "traefik.http.routers.drawio.tls.certresolver=${TRAEFIK_RESOLVER}"
 
-  db:
-    image: postgres:15-alpine
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.role == manager
-          - node.labels.node_id == 4
-    environment:
-      POSTGRES_USER: wikijs
-      POSTGRES_PASSWORD: ${DB_PASS}
-      POSTGRES_DB: wikijs
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    networks:
-      - docs_net
+    # ---- Temporary host port for quick testing (remove in prod) ----
+    ports:
+      - "8086:8080"
 
 networks:
   docs_net:
     driver: overlay
+  # traefik:
+  #   external: true
 
 volumes:
   db_data:
-    driver: local
