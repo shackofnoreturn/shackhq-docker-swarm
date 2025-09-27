@@ -1,59 +1,71 @@
 services:
-  wikidb:
-    image: postgres:15
-    environment:
-      POSTGRES_DB: wikijs
-      POSTGRES_USER: wikijs
-      POSTGRES_PASSWORD: ${DB_PASS}
-    logging:
-      driver: none
-    restart: unless-stopped
-    volumes:
-      - wikidb-data:/var/lib/postgresql/data
-
-  wikijs:
-    image: ghcr.io/requarks/wiki:2
-    depends_on:
-      - wikidb
+  wiki:
+    image: requarks/wiki:latest
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+          - node.labels.node_id == 4
     environment:
       DB_TYPE: postgres
-      DB_HOST: wikidb
+      DB_HOST: db
       DB_PORT: 5432
       DB_USER: wikijs
       DB_PASS: ${DB_PASS}
       DB_NAME: wikijs
-      # Database SSL/HTTPS support
-      # DB_SSL: true
-      # DB_SSL_CA: /path/to/ca.pem
-
-      # Let's Encrypt support 
-      #  Exposed HTTPS port is 3443
-      #  Both HTTP and HTTPS ports must be exposed when using Let's Encrypt
-      # SSL_ACTIVE: true
-      # LETSENCRYPT_DOMAIN: wiki.example.com
-      # LETSENCRYPT_EMAIL:
-      
-      # When running multiple replicas
-      # HA_ACTIVE: true
-    restart: unless-stopped
     ports:
       - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - docs_net
+    # Uncomment Traefik labels if you have Traefik set up
     # labels:
     #   - "traefik.enable=true"
-    #   - "traefik.http.routers.wikijs.rule=Host(`${WIKI_DOMAIN}`)"
-    #   - "traefik.http.routers.wikijs.entrypoints=websecure"
-    #   - "traefik.http.routers.wikijs.tls.certresolver=${TRAEFIK_RESOLVER}"
-    #   - "traefik.http.services.wikijs.loadbalancer.server.port=3000"
+    #   - "traefik.http.routers.wiki.rule=Host(`${WIKI_DOMAIN}`)"
+    #   - "traefik.http.services.wiki.loadbalancer.server.port=3000"
+    #   - "traefik.http.routers.wiki.tls.certresolver=${TRAEFIK_RESOLVER}"
 
   drawio:
-    image: jgraph/drawio
-    restart: unless-stopped
+    image: jgraph/drawio:latest
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+          - node.labels.node_id == 4
+    ports:
+      - "8080:8080"
+    networks:
+      - docs_net
     # labels:
     #   - "traefik.enable=true"
     #   - "traefik.http.routers.drawio.rule=Host(`${DRAWIO_DOMAIN}`)"
-    #   - "traefik.http.routers.drawio.entrypoints=websecure"
-    #   - "traefik.http.routers.drawio.tls.certresolver=${TRAEFIK_RESOLVER}"
     #   - "traefik.http.services.drawio.loadbalancer.server.port=8080"
+    #   - "traefik.http.routers.drawio.tls.certresolver=${TRAEFIK_RESOLVER}"
+
+  db:
+    image: postgres:15-alpine
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+          - node.labels.node_id == 4
+    environment:
+      POSTGRES_USER: wikijs
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: wikijs
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - docs_net
+
+networks:
+  docs_net:
+    driver: overlay
 
 volumes:
-  wikidb-data:
+  db_data:
+    driver: local

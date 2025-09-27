@@ -9,8 +9,8 @@
       "categories": [ "Documentation" ],
       "platform": "linux",
       "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/wikijs.png",
-      "note": "Deploys Wiki.js + PostgreSQL + Draw.io. Traefik labels are commented out, enable them later.",
-      "name": "documentation-stack",
+      "note": "Deploys Wiki.js, Draw.io and PostgreSQL on a single manager node with label node_id == 4.\nMake sure the node has the label set: docker node update --label-add node_id=4 <NODE_NAME>.\nTraefik labels are included but commented out in the compose file.",
+      "name": "Documentation Stack",
       "repository": {
         "url": "https://github.com/shackofnoreturn/shackhq-docker-swarm",
         "stackfile": "stacks/dev/docs/docker-compose.docs.yml"
@@ -19,7 +19,7 @@
         {
           "name": "STACK_NAME",
           "label": "Stack name",
-          "default": "Documentation Stack"
+          "default": "docs"
         },
         {
           "name": "WIKI_DOMAIN",
@@ -33,7 +33,7 @@
         },
         {
           "name": "DB_PASS",
-          "label": "Postgres password",
+          "label": "PostgreSQL password",
           "default": "wikijs_pass"
         },
         {
