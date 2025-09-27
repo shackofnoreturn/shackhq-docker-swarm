@@ -1,81 +1,59 @@
 services:
-  db:
-    image: postgres:15-alpine
+  wikidb:
+    image: postgres:15
     environment:
+      POSTGRES_DB: wikijs
       POSTGRES_USER: wikijs
       POSTGRES_PASSWORD: ${DB_PASS}
-      POSTGRES_DB: wiki
+    logging:
+      driver: none
+    restart: unless-stopped
     volumes:
-      - db_data:/var/lib/postgresql/data
-    networks:
-      - docs_net
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.role == manager
-          - node.labels.node_id == 4
+      - wikidb-data:/var/lib/postgresql/data
 
-  wiki:
-    image: requarks/wiki:2
+  wikijs:
+    image: ghcr.io/requarks/wiki:2
     depends_on:
-      - db
+      - wikidb
     environment:
       DB_TYPE: postgres
-      DB_HOST: db
+      DB_HOST: wikidb
       DB_PORT: 5432
       DB_USER: wikijs
       DB_PASS: ${DB_PASS}
-      DB_NAME: wiki
-    networks:
-      - docs_net
-      # - traefik
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.role == manager
-          - node.labels.node_id == 4
-      # labels:
-        # ---- Traefik (enable once your proxy is ready) ----
-        # - "traefik.enable=true"
-        # - "traefik.http.routers.wiki.rule=Host(`${WIKI_DOMAIN}`)"
-        # - "traefik.http.services.wiki.loadbalancer.server.port=3000"
-        # - "traefik.http.routers.wiki.entrypoints=web"
-        # - "traefik.http.routers.wiki.tls.certresolver=${TRAEFIK_RESOLVER}"
+      DB_NAME: wikijs
+      # Database SSL/HTTPS support
+      # DB_SSL: true
+      # DB_SSL_CA: /path/to/ca.pem
 
-    # ---- Temporary host port for quick testing (remove in prod) ----
+      # Let's Encrypt support 
+      #  Exposed HTTPS port is 3443
+      #  Both HTTP and HTTPS ports must be exposed when using Let's Encrypt
+      # SSL_ACTIVE: true
+      # LETSENCRYPT_DOMAIN: wiki.example.com
+      # LETSENCRYPT_EMAIL:
+      
+      # When running multiple replicas
+      # HA_ACTIVE: true
+    restart: unless-stopped
     ports:
-      - "8085:3000"
+      - "3000:3000"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.wikijs.rule=Host(`${WIKI_DOMAIN}`)"
+    #   - "traefik.http.routers.wikijs.entrypoints=websecure"
+    #   - "traefik.http.routers.wikijs.tls.certresolver=${TRAEFIK_RESOLVER}"
+    #   - "traefik.http.services.wikijs.loadbalancer.server.port=3000"
 
   drawio:
-    image: jgraph/drawio:22.1.0
-    networks:
-      - docs_net
-      # - traefik
-    deploy:
-      replicas: 1
-      placement:
-        constraints:
-          - node.role == manager
-          - node.labels.node_id == 4
-      # labels:
-        # ---- Traefik (enable once your proxy is ready) ----
-        # - "traefik.enable=true"
-        # - "traefik.http.routers.drawio.rule=Host(`${DRAWIO_DOMAIN}`)"
-        # - "traefik.http.services.drawio.loadbalancer.server.port=8080"
-        # - "traefik.http.routers.drawio.entrypoints=web"
-        # - "traefik.http.routers.drawio.tls.certresolver=${TRAEFIK_RESOLVER}"
-
-    # ---- Temporary host port for quick testing (remove in prod) ----
-    ports:
-      - "8086:8080"
-
-networks:
-  docs_net:
-    driver: overlay
-  # traefik:
-  #   external: true
+    image: jgraph/drawio
+    restart: unless-stopped
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.drawio.rule=Host(`${DRAWIO_DOMAIN}`)"
+    #   - "traefik.http.routers.drawio.entrypoints=websecure"
+    #   - "traefik.http.routers.drawio.tls.certresolver=${TRAEFIK_RESOLVER}"
+    #   - "traefik.http.services.drawio.loadbalancer.server.port=8080"
 
 volumes:
-  db_data:
+  wikidb-data:
