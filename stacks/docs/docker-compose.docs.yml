@@ -36,7 +36,7 @@ services:
         constraints:
           - node.role == manager
           - node.labels.node_id == 4
-      labels:
+      # labels:
         # ---- Traefik (enable once your proxy is ready) ----
         # - "traefik.enable=true"
         # - "traefik.http.routers.wiki.rule=Host(`${WIKI_DOMAIN}`)"
@@ -59,7 +59,7 @@ services:
         constraints:
           - node.role == manager
           - node.labels.node_id == 4
-      labels:
+      # labels:
         # ---- Traefik (enable once your proxy is ready) ----
         # - "traefik.enable=true"
         # - "traefik.http.routers.drawio.rule=Host(`${DRAWIO_DOMAIN}`)"
