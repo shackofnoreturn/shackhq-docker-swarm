@@ -13,7 +13,7 @@
       "name": "Documentation Stack",
       "repository": {
         "url": "https://github.com/shackofnoreturn/shackhq-docker-swarm",
-        "stackfile": "stacks/dev/docs/docker-compose.docs.yml"
+        "stackfile": "stacks/docs/docker-compose.docs.yml"
       },
       "env": [
         {
