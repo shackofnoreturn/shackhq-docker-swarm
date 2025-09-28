@@ -48,33 +48,30 @@
     {
       "id": 2,
       "type": 2,
-      "title": "Traefik Base Stack",
-      "description": "Traefik reverse proxy with Let's Encrypt, for routing all app stacks",
-      "categories": ["Infrastructure"],
+      "title": "Traefik Reverse Proxy",
+      "description": "Deploys Traefik v3.5.1 as a Swarm-aware reverse proxy with ACME support",
+      "categories": ["Networking", "Proxy"],
       "platform": "linux",
-      "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/traefik.png",
-      "note": "Deploys Traefik on the Swarm. Overlay network `${TRAEFIK_NET}` will be used by app stacks.",
+      "logo": "https://doc.traefik.io/traefik/assets/img/traefik.logo.png",
+      "note": "Deploy Traefik first so other stacks can join the traefik-dev network.",
       "name": "Traefik Stack",
       "repository": {
         "url": "https://github.com/shackofnoreturn/shackhq-docker-swarm",
         "stackfile": "stacks/traefik/docker-compose.traefik.yml"
       },
       "env": [
-        {
-          "name": "TRAEFIK_DOMAIN",
-          "label": "Traefik domain for dashboard",
-          "default": "traefik.example.com"
-        },
-        {
-          "name": "TRAEFIK_RESOLVER",
-          "label": "Traefik certresolver name",
-          "default": "myresolver"
-        },
-        {
-          "name": "TRAEFIK_NET",
-          "label": "Overlay network for Traefik",
-          "default": "traefik"
-        }
+        { "name": "TRAEFIK_IMAGE",        "label": "Traefik image",         "default": "traefik:v3.5.1" },
+        { "name": "TRAEFIK_LOG_LEVEL",    "label": "Log level",             "default": "INFO" },
+        { "name": "TRAEFIK_ACCESSLOG",    "label": "Enable access log",     "default": "true" },
+        { "name": "HTTP_PORT",            "label": "HTTP port",             "default": "80" },
+        { "name": "HTTPS_PORT",           "label": "HTTPS port",            "default": "443" },
+        { "name": "TRAEFIK_CERT_RESOLVER","label": "Cert resolver",         "default": "myresolver" },
+        { "name": "ACME_EMAIL",           "label": "ACME email",            "default": "admin@example.com" },
+        { "name": "ACME_STORAGE",         "label": "ACME storage path",     "default": "/letsencrypt/acme.json" },
+        { "name": "TRAEFIK_NETWORK",      "label": "Overlay network name",  "default": "traefik-dev" },
+        { "name": "TRAEFIK_REPLICAS",     "label": "Replicas",              "default": "1" },
+        { "name": "CONSTRAINT_NODE_ROLE", "label": "Node role constraint",  "default": "manager" },
+        { "name": "CONSTRAINT_NODE_ID",   "label": "Node ID label",         "default": "4" }
       ]
     }
 
