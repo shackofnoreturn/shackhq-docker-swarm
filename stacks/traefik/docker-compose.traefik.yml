@@ -96,7 +96,7 @@ services:
 
 networks:
   ${TRAEFIK_NETWORK}:
-    driver: overlay
+    external: true
 
 volumes:
   traefik_data:
