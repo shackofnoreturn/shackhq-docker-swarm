@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: wikijs
       POSTGRES_USER: wikijs
-      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_PASSWORD: ${WIKIDB_PASS}
     logging:
       driver: none
     restart: unless-stopped
@@ -20,7 +20,7 @@ services:
       DB_HOST: wikidb
       DB_PORT: 5432
       DB_USER: wikijs
-      DB_PASS: ${DB_PASS}
+      DB_PASS: ${WIKIDB_PASS}
       DB_NAME: wikijs
       # Database SSL/HTTPS support
       # DB_SSL: true
@@ -38,7 +38,7 @@ services:
     restart: unless-stopped
     ports:
     - target: 3000
-      published: 3005
+      published: ${WIKI_PORT}
       protocol: tcp
       mode: host
     # labels:
@@ -53,25 +53,19 @@ services:
     restart: unless-stopped
     ports:
     - target: 8080
-      published: 8085
+      published: ${DRAWIO_PORT}
       protocol: tcp
       mode: host
     environment:
       # LETS_ENCRYPT_ENABLED: true
-      PUBLIC_DNS: draw.dev.shackofnoreturn.com
+      PUBLIC_DNS: ${DRAWIO_DOMAIN}
       # ORGANISATION_UNIT: Cloud Native Application
-      ORGANISATION: TSONR
-      CITY: Ninove
-      STATE: Ninove
-      COUNTRY_CODE: BE
+      ORGANISATION: ${DRAWIO_ORG}
+      CITY: ${DRAWIO_CITY}
+      STATE: ${DRAWIO_STATE}
+      COUNTRY_CODE: ${DRAWIO_COUNTRY}
       # KEYSTORE_PASS: V3ry1nS3cur3P4ssw0rd
       # KEY_PASS: <ref:KEYSTORE_PASS>
-    # healthcheck:
-    #   test: ["CMD-SHELL", "curl -f http://domain:8080 || exit 1"]
-    #   interval: 1m30s
-    #   timeout: 10s
-    #   retries: 5
-    #   start_period: 10s
     # labels:
     #   - "traefik.enable=true"
     #   - "traefik.http.routers.drawio.rule=Host(`${DRAWIO_DOMAIN}`)"

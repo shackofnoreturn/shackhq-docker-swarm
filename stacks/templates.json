@@ -1,16 +1,17 @@
 {
   "version": "3",
   "templates": [
+
     {
       "id": 1,
       "type": 2,
-      "title": "Documentation Stack (Wiki.js + Draw.io)",
+      "title": "Documentation (Wiki.js + Draw.io)",
       "description": "Central documentation portal with Wiki.js, PostgreSQL, and Draw.io",
       "categories": [ "Documentation" ],
       "platform": "linux",
       "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/wikijs.png",
       "note": "Deploys Wiki.js, Draw.io and PostgreSQL on a single manager node with label node_id == 4.\nMake sure the node has the label set: docker node update --label-add node_id=4 <NODE_NAME>.\nTraefik labels are included but commented out in the compose file.",
-      "name": "Documentation Stack",
+      "name": "documentation",
       "repository": {
         "url": "https://github.com/shackofnoreturn/shackhq-docker-swarm",
         "stackfile": "stacks/docs/docker-compose.docs.yml"
@@ -42,6 +43,40 @@
           "default": "myresolver"
         }
       ]
+    },
+
+    {
+      "id": 2,
+      "type": 2,
+      "title": "Traefik Base Stack",
+      "description": "Traefik reverse proxy with Let's Encrypt, for routing all app stacks",
+      "categories": ["Infrastructure"],
+      "platform": "linux",
+      "logo": "https://raw.githubusercontent.com/Qballjos/portainer_templates/master/Images/traefik.png",
+      "note": "Deploys Traefik on the Swarm. Overlay network `${TRAEFIK_NET}` will be used by app stacks.",
+      "name": "Traefik Stack",
+      "repository": {
+        "url": "https://github.com/shackofnoreturn/shackhq-docker-swarm",
+        "stackfile": "stacks/traefik/docker-compose.traefik.yml"
+      },
+      "env": [
+        {
+          "name": "TRAEFIK_DOMAIN",
+          "label": "Traefik domain for dashboard",
+          "default": "traefik.example.com"
+        },
+        {
+          "name": "TRAEFIK_RESOLVER",
+          "label": "Traefik certresolver name",
+          "default": "myresolver"
+        },
+        {
+          "name": "TRAEFIK_NET",
+          "label": "Overlay network for Traefik",
+          "default": "traefik"
+        }
+      ]
     }
+
   ]
 }
