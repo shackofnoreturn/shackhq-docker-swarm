@@ -38,7 +38,7 @@ services:
     restart: unless-stopped
     ports:
     - target: 3000
-      published: 8085
+      published: 3005
       protocol: tcp
       mode: host
     # labels:
@@ -48,15 +48,36 @@ services:
     #   - "traefik.http.routers.wikijs.tls.certresolver=${TRAEFIK_RESOLVER}"
     #   - "traefik.http.services.wikijs.loadbalancer.server.port=3000"
 
-  # drawio:
-  #   image: jgraph/drawio
-  #   restart: unless-stopped
-  #   # labels:
-  #   #   - "traefik.enable=true"
-  #   #   - "traefik.http.routers.drawio.rule=Host(`${DRAWIO_DOMAIN}`)"
-  #   #   - "traefik.http.routers.drawio.entrypoints=websecure"
-  #   #   - "traefik.http.routers.drawio.tls.certresolver=${TRAEFIK_RESOLVER}"
-  #   #   - "traefik.http.services.drawio.loadbalancer.server.port=8080"
+  drawio:
+    image: jgraph/drawio
+    restart: unless-stopped
+    ports:
+    - target: 8080
+      published: 8085
+      protocol: tcp
+      mode: host
+    environment:
+      # LETS_ENCRYPT_ENABLED: true
+      PUBLIC_DNS: draw.dev.shackofnoreturn.com
+      # ORGANISATION_UNIT: Cloud Native Application
+      ORGANISATION: TSONR
+      CITY: Ninove
+      STATE: Ninove
+      COUNTRY_CODE: BE
+      # KEYSTORE_PASS: V3ry1nS3cur3P4ssw0rd
+      # KEY_PASS: <ref:KEYSTORE_PASS>
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://domain:8080 || exit 1"]
+    #   interval: 1m30s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 10s
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.http.routers.drawio.rule=Host(`${DRAWIO_DOMAIN}`)"
+    #   - "traefik.http.routers.drawio.entrypoints=websecure"
+    #   - "traefik.http.routers.drawio.tls.certresolver=${TRAEFIK_RESOLVER}"
+    #   - "traefik.http.services.drawio.loadbalancer.server.port=8080"
 
 volumes:
   wikidb-data:
