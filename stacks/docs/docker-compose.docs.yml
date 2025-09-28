@@ -45,15 +45,15 @@ services:
     #   - "traefik.http.routers.wikijs.tls.certresolver=${TRAEFIK_RESOLVER}"
     #   - "traefik.http.services.wikijs.loadbalancer.server.port=3000"
 
-  drawio:
-    image: jgraph/drawio
-    restart: unless-stopped
-    # labels:
-    #   - "traefik.enable=true"
-    #   - "traefik.http.routers.drawio.rule=Host(`${DRAWIO_DOMAIN}`)"
-    #   - "traefik.http.routers.drawio.entrypoints=websecure"
-    #   - "traefik.http.routers.drawio.tls.certresolver=${TRAEFIK_RESOLVER}"
-    #   - "traefik.http.services.drawio.loadbalancer.server.port=8080"
+  # drawio:
+  #   image: jgraph/drawio
+  #   restart: unless-stopped
+  #   # labels:
+  #   #   - "traefik.enable=true"
+  #   #   - "traefik.http.routers.drawio.rule=Host(`${DRAWIO_DOMAIN}`)"
+  #   #   - "traefik.http.routers.drawio.entrypoints=websecure"
+  #   #   - "traefik.http.routers.drawio.tls.certresolver=${TRAEFIK_RESOLVER}"
+  #   #   - "traefik.http.services.drawio.loadbalancer.server.port=8080"
 
 volumes:
   wikidb-data:
