@@ -65,7 +65,7 @@ services:
 #       - CF_API_TOKEN=${CF_DNS_API_TOKEN}
 
     networks:
-      - ${TRAEFIK_NETWORK}
+      - traefik-dev-net
     volumes:
       - traefik_data:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -83,7 +83,6 @@ services:
 # # #        - "traefik.http.routers.traefik-dev.tls.certresolver=devresolver"
 # # #        - "traefik.http.services.traefik-dev.loadbalancer.server.port=8080"
 
-    restart: unless-stopped
 
 # Nieuwe CF DNS for env?
 #   cloudflare-ddns:
@@ -95,7 +94,7 @@ services:
 #       - PROXIED=false
 
 networks:
-  ${TRAEFIK_NETWORK}:
+  traefik-dev-net:
     external: true
 
 volumes:
