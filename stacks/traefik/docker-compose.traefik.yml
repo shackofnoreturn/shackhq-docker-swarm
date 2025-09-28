@@ -25,28 +25,28 @@ services:
       - "--providers.docker.exposedByDefault=false"
 
     ports:
-    - target: ${HTTP_PORT}
-      published: ${HTTP_PORT}
-      protocol: tcp
-      mode: host
-    - target: ${HTTPS_PORT}
-      published: ${HTTPS_PORT}
-      protocol: tcp
-      mode: host
+      - target: ${HTTP_PORT}
+        published: ${HTTP_PORT}
+        protocol: tcp
+        mode: host
+      - target: ${HTTPS_PORT}
+        published: ${HTTPS_PORT}
+        protocol: tcp
+        mode: host
 
     volumes:
-    - /var/run/docker.sock:/var/run/docker.sock:ro
-    - traefik-letsencrypt:${ACME_STORAGE}
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik-letsencrypt:${ACME_STORAGE}
 
     networks:
-    - ${TRAEFIK_NETWORK}
+      - ${TRAEFIK_NETWORK}
 
     deploy:
       replicas: ${TRAEFIK_REPLICAS}
       placement:
         constraints:
-        - node.role == ${CONSTRAINT_NODE_ROLE}
-        - node.labels.node_id == ${CONSTRAINT_NODE_ID}
+          - node.role == ${CONSTRAINT_NODE_ROLE}
+          - node.labels.node_id == ${CONSTRAINT_NODE_ID}
       restart_policy:
         condition: on-failure
 
