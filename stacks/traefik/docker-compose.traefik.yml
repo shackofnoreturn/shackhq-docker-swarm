@@ -1,0 +1,102 @@
+services:
+  traefik:
+    image: traefik:v3.5.1
+    command:
+      # Logging
+      - "--log.level=DEBUG"
+      - "--accesslog=true"
+
+      # API / Dashboard
+      - "--api=true"
+      - "--api.dashboard=true"
+      # - "--api.insecure=true"
+
+      # EntryPoints
+      - "--entrypoints.${ENTRYPOINT_HTTP}.address=:80"
+      - "--entrypoints.${ENTRYPOINT_HTTPS}.address=:443"
+      # - "--entrypoints.web.address=:80"
+      # - "--entrypoints.websecure.address=:443"
+
+      # Providers
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+#     - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+#     - "--providers.docker.watch=true"
+#     - "--providers.docker.network=traefik-dev-net"
+
+
+      # Let's Encrypt
+      - "--certificatesresolvers.${TRAEFIK_RESOLVER}.acme.tlschallenge=true"
+      - "--certificatesresolvers.${TRAEFIK_RESOLVER}.acme.email=admin@example.com"
+      - "--certificatesresolvers.${TRAEFIK_RESOLVER}.acme.storage=/letsencrypt/acme.json"
+
+      # Let's Encrypt via Cloudflare DNS challenge (wildcard)
+#       - "--certificatesresolvers.devresolver.acme.dnschallenge=true"
+#       - "--certificatesresolvers.devresolver.acme.dnschallenge.provider=cloudflare"
+#       - "--certificatesresolvers.devresolver.acme.email=${CF_EMAIL}"
+#       - "--certificatesresolvers.devresolver.acme.storage=/letsencrypt/acme.json"
+#       - "--certificatesresolvers.devresolver.acme.dnschallenge.resolvers=1.1.1.1"
+#       - "--certificatesresolvers.devresolver.acme.caserver=https://acme-v02.api.letsencrypt.org/directory"
+
+    # ports:
+    #   - "80:80"
+    #   - "443:443"
+      # - "8080:8080"  # Optional: Traefik dashboard if you want direct host access
+    ports:
+      # Expose Traefik's entry points to the Swarm
+      # Swarm requires the long syntax for ports.
+      - target: 80 # Container port (Traefik web entry point)
+        published: 80 # Host port exposed on the nodes
+        protocol: tcp
+      # 'host' mode binds directly to the node's IP where the task runs.
+      # 'ingress' mode uses Swarm's Routing Mesh (load balances across nodes).
+      # Choose based on your load balancing strategy. 'host' is often simpler if using an external LB.
+        mode: host
+      - target: 443 # Container port ( Traefik websecure entry point)
+        published: 443 # Host port
+        protocol: tcp
+        mode: host
+      - target: 8080 # Container port ( Traefik websecure entry point)
+        published: 8080 # Host port
+        protocol: tcp
+        mode: host
+
+#     environment:
+#       - CF_API_TOKEN=${CF_DNS_API_TOKEN}
+
+    networks:
+      - ${TRAEFIK_NET}
+    volumes:
+      - traefik_data:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+          - node.labels.node_id == 4
+#     labels:
+# #         - "traefik.enable=true"
+# # #        - "traefik.http.routers.traefik-dev.rule=Host(`traefik-dev.${CF_ZONE}`)"
+# # #        - "traefik.http.routers.traefik-dev.entrypoints=websecure"
+# # #        - "traefik.http.routers.traefik-dev.tls=true"
+# # #        - "traefik.http.routers.traefik-dev.tls.certresolver=devresolver"
+# # #        - "traefik.http.services.traefik-dev.loadbalancer.server.port=8080"
+
+    restart: unless-stopped
+
+# Nieuwe CF DNS for env?
+#   cloudflare-ddns:
+#     image: oznu/cloudflare-ddns:latest
+#     environment:
+#       - API_KEY=${CF_DNS_API_TOKEN}
+#       - ZONE=${CF_ZONE}
+#       - SUBDOMAIN=${CF_SUBDOMAIN}
+#       - PROXIED=false
+
+networks:
+  ${TRAEFIK_NETWORK}:
+    driver: overlay
+
+volumes:
+  traefik_data:
