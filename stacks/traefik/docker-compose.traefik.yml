@@ -43,7 +43,7 @@ services:
       - traefik-letsencrypt:/letsencrypt/acme.json
 
     networks:
-      - ${TRAEFIK_NETWORK}
+      - traefik-dev
 
     deploy:
       replicas: ${TRAEFIK_REPLICAS:-1}
