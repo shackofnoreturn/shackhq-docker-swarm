@@ -55,7 +55,7 @@ services:
         condition: on-failure
 
 networks:
-  ${TRAEFIK_NETWORK}:
+  traefik-dev:
     driver: overlay
 
 volumes:
