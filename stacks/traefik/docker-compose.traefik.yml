@@ -40,7 +40,7 @@ services:
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - traefik-letsencrypt:${ACME_STORAGE}
+      - traefik-letsencrypt:/letsencrypt/acme.json
 
     networks:
       - ${TRAEFIK_NETWORK}
@@ -60,4 +60,3 @@ networks:
 
 volumes:
   traefik-letsencrypt:
-    driver: local
