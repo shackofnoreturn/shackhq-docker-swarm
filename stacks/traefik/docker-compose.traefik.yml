@@ -2,28 +2,6 @@ services:
   traefik:
     image: traefik:v3.5.1
 
-    command:
-      # ── Core ─────────────────────────────
-      - "--log.level=${TRAEFIK_LOG_LEVEL}"
-      - "--accesslog=${TRAEFIK_ACCESSLOG}"
-
-      # ── API & Dashboard ──────────────────
-      - "--api.dashboard=true"
-      - "--api.insecure=false"
-
-      # ── Entrypoints ──────────────────────
-      - "--entrypoints.web.address=:${HTTP_PORT}"
-      - "--entrypoints.websecure.address=:${HTTPS_PORT}"
-
-      # ── Certificates ─────────────────────
-      - "--certificatesresolvers.${TRAEFIK_CERT_RESOLVER}.acme.tlschallenge=true"
-      - "--certificatesresolvers.${TRAEFIK_CERT_RESOLVER}.acme.email=${ACME_EMAIL}"
-      - "--certificatesresolvers.${TRAEFIK_CERT_RESOLVER}.acme.storage=${ACME_STORAGE}"
-
-      # ── Providers ────────────────────────
-      - "--providers.docker.swarmMode=true"
-      - "--providers.docker.exposedByDefault=false"
-
     ports:
       - target: 80
         published: 80
@@ -46,11 +24,11 @@ services:
       - traefik-dev
 
     deploy:
-      replicas: ${TRAEFIK_REPLICAS:-1}
+      replicas: 1
       placement:
         constraints:
-          - node.role == ${CONSTRAINT_NODE_ROLE}
-          - node.labels.node_id == ${CONSTRAINT_NODE_ID}
+          - node.role == manager
+          - node.labels.node_id == 4
       restart_policy:
         condition: on-failure
 
