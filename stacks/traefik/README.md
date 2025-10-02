@@ -15,7 +15,8 @@ This repository provides a standardized Docker Swarm stack for deploying Traefik
 ## Build
 *Build stack.yml and push to Github repo*
 ```bash
-docker compose --env-file .env config > stack.yml
+set -a; . ./.env; set +a
+envsubst <docker-compose.yml >docker-compose.processed.yml
 ```
 
 ## Deploy Stack
@@ -23,4 +24,4 @@ docker compose --env-file .env config > stack.yml
 - Name: documentation
 - Repository URL: https://github.com/shackofnoreturn/shackhq-docker-swarm.git
 - Repository reference: refs/heads/dev
-- Compose path: stacks/traefik/stack.yml
+- Compose path: stacks/traefik/docker-compose.processed.yml
