@@ -12,14 +12,15 @@ This repository provides a standardized Docker Swarm stack for deploying Traefik
 - `portainer-template.json`: For Portainer's Template UI.
 - `boilerplate.template.json`: A skeleton for new services.
 
-## Deployment
+## Build
+*Build stack.yml and push to Github repo*
 ```bash
-docker stack deploy -c docker-compose.yml ${SERVICE_NAME}
+docker compose --env-file .env config > stack.yml
+```
 
-## Creating Stack
+## Deploy Stack
 *Go to development node in Portainer*
-
 - Name: documentation
 - Repository URL: https://github.com/shackofnoreturn/shackhq-docker-swarm.git
 - Repository reference: refs/heads/dev
-- Compose path: stacks/traefik/docker-compose.yml
+- Compose path: stacks/traefik/stack.yml

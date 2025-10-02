@@ -1,5 +1,3 @@
-version: "3.9"
-
 x-common-logging: &default-logging
   driver: json-file
   options:
@@ -46,10 +44,10 @@ services:
     image: traefik:v3.1
     container_name: traefik
     hostname: traefik
-    # env_file:
-      # - .env
+    env_file:
+      - .env
     command:
-      # FIXME: This is also defined in config.yml, so it should be removed from one of them
+      # FIXME: This is also defined in confg
       - "--api.insecure=true"
       - "--api.dashboard=true"
       - "--providers.swarm=true"
