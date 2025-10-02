@@ -1,19 +1,32 @@
-# Traefik v3.1 Stack for Docker Swarm
+# Traefik Stack for Docker Swarm
 
 ## Overview
-This repository provides a standardized Docker Swarm stack for deploying Traefik v3.1 as a reverse proxy with automatic HTTPS via Let's Encrypt.
+This repository provides a standardized Docker Swarm stack for deploying Traefik as a reverse proxy with automatic HTTPS via Let's Encrypt.
 
 ## Files
 - `docker-compose.yml`: Swarm-compatible compose file.
+- `docker-compose-processed.yml`: Compose file processed with .env variables.
 - `.env`: Runtime configuration.
-- `.env.example`: Template for new environments.
 - `configs/`: Configuration files for Traefik.
 - `secrets/`: Secrets for the Traefik dashboard.
 - `portainer-template.json`: For Portainer's Template UI.
-- `boilerplate.template.json`: A skeleton for new services.
+
+## Certificates
+*Generate self signed certificate for development.*
+```bash
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout certs/traefik-dev.key -out certs/traefik-dev.crt \
+  -subj "/CN=*.dev.shackofnoreturn.com"
+```
+
+## Dashboard Credentials
+*Generate hashed username/password pair.*
+```bash
+htpasswd -nb admin "P@ssw0rd" | sed -e 's/\$/\$\$/g'
+```
 
 ## Build
-*Build stack.yml and push to Github repo*
+*Process docker-compose.yml and push to Github repo.*
 ```bash
 set -a; . ./.env; set +a
 envsubst <docker-compose.yml >docker-compose.processed.yml

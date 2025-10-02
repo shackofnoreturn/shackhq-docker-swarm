@@ -41,12 +41,13 @@ x-common-deploy: &default-deploy
 
 services:
   traefik:
-    image: traefik:v3.1
+    image: traefik:v3.4
     hostname: traefik
     command:
       # FIXME: This is also defined in confg
       - "--api.insecure=true"
       - "--api.dashboard=true"
+      - "--providers.file.filename=/dynamic/tls.yml"
       - "--providers.swarm=true"
       - "--providers.swarm.endpoint=unix:///var/run/docker.sock"
       - "--entrypoints.web.address=:80"
@@ -55,15 +56,17 @@ services:
       # TODO: Change myresolver to your resolver name if you change it below
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
       - "--certificatesresolvers.myresolver.acme.email=${ACME_EMAIL}"
-      - "--certificatesresolvers.myresolver.acme.storage=/data/acme.json"
+      - "--certificatesresolvers.myresolver.acme.storage=/certs/acme.json"
       - "--log.level=INFO"
       - "--accesslog=true"
+      - "--metrics.prometheus=true"
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      # - ./data:/data
+      - ./certs:/certs:ro
+      - ./dynamic:/dynamic:ro
     networks:
       - traefik-development
     deploy:
