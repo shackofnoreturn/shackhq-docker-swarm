@@ -45,7 +45,10 @@ services:
     container_name: traefik
     hostname: traefik
     env_file:
-      - stack.env
+      - path: ./stack.env
+        required: false
+      - path: ./.env
+        required: false
     command:
       # FIXME: This is also defined in confg
       - "--api.insecure=true"
