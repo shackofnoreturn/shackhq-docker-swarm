@@ -11,13 +11,13 @@ x-common-deploy: &default-deploy
   placement:
     constraints:
       - node.role == manager
-  # resources:
-  #   limits:
-  #     cpus: "${LIMIT_CPUS}"
-  #     memory: "${LIMIT_MEMORY}"
-  #   reservations:
-  #     cpus: "${RESERVE_CPUS}"
-  #     memory: "${RESERVE_MEMORY}"
+  resources:
+    limits:
+      cpus: "${LIMIT_CPUS}"
+      memory: "${LIMIT_MEMORY}"
+    reservations:
+      cpus: "${RESERVE_CPUS}"
+      memory: "${RESERVE_MEMORY}"
   restart_policy:
     condition: any
     delay: 5s
@@ -45,7 +45,7 @@ services:
     container_name: traefik
     hostname: traefik
     env_file:
-      - .env
+      - stack.env
     command:
       # FIXME: This is also defined in confg
       - "--api.insecure=true"
