@@ -42,7 +42,6 @@ x-common-deploy: &default-deploy
 services:
   traefik:
     image: traefik:v3.1
-    container_name: traefik
     hostname: traefik
     command:
       # FIXME: This is also defined in confg
