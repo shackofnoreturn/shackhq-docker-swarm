@@ -1,0 +1,107 @@
+version: "3.9"
+
+x-common-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-common-deploy: &default-deploy
+  mode: replicated
+  replicas: ${REPLICAS}
+  endpoint_mode: vip
+  placement:
+    constraints:
+      - node.role == worker
+  resources:
+    limits:
+      cpus: "${LIMIT_CPUS}"
+      memory: "${LIMIT_MEMORY}"
+    reservations:
+      cpus: "${RESERVE_CPUS}"
+      memory: "${RESERVE_MEMORY}"
+  restart_policy:
+    condition: any
+    delay: 5s
+    max_attempts: 5
+    window: 120s
+  update_config:
+    parallelism: 1
+    delay: 10s
+    order: start-first
+  rollback_config:
+    parallelism: 1
+    delay: 10s
+    order: stop-first
+  labels:
+    - "com.example.service=${SERVICE_NAME}"
+
+services:
+  myservice:
+    image: ${IMAGE}:${IMAGE_TAG}
+    hostname: ${HOSTNAME}
+    container_name: ${CONTAINER_NAME}
+    env_file:
+      - .env
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+      UMASK: ${UMASK}
+      EXTRA_ENV_VAR: ${EXTRA_ENV_VAR}
+    command: ${COMMAND}
+    entrypoint: ${ENTRYPOINT}
+    configs:
+      - source: app_config
+        target: /etc/myapp/config.yaml
+    secrets:
+      - source: app_secret
+        target: /run/secrets/app_secret
+    volumes:
+      - ${DATA_VOLUME}:/data
+      - ${CONFIG_VOLUME}:/config
+      - ${LOG_VOLUME}:/var/log/app
+    networks:
+      - backend
+      - frontend
+    ports:
+      - target: ${APP_PORT}
+        published: ${APP_PORT_PUBLISHED}
+        protocol: tcp
+        mode: host
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:${APP_PORT}/health || exit 1"]
+      interval: ${HEALTHCHECK_INTERVAL}
+      timeout: ${HEALTHCHECK_TIMEOUT}
+      retries: ${HEALTHCHECK_RETRIES}
+      start_period: ${HEALTHCHECK_START_PERIOD}
+    logging: *default-logging
+    deploy: *default-deploy
+
+networks:
+  frontend:
+    driver: overlay
+    attachable: true
+  backend:
+    driver: overlay
+    attachable: true
+
+volumes:
+  data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=${NFS_SERVER},rw
+      device: ":${NFS_PATH}/data"
+  config:
+    driver: local
+  logs:
+    driver: local
+
+configs:
+  app_config:
+    file: ./configs/app_config.yaml
+
+secrets:
+  app_secret:
+    file: ./secrets/app_secret.txt

@@ -1,0 +1,87 @@
+version: "3.9"
+
+x-common-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-common-deploy: &default-deploy
+  mode: replicated
+  replicas: ${REPLICAS}
+  endpoint_mode: vip
+  placement:
+    constraints:
+      - node.role == manager
+  resources:
+    limits:
+      cpus: "${LIMIT_CPUS}"
+      memory: "${LIMIT_MEMORY}"
+    reservations:
+      cpus: "${RESERVE_CPUS}"
+      memory: "${RESERVE_MEMORY}"
+  restart_policy:
+    condition: any
+    delay: 5s
+    max_attempts: 5
+    window: 120s
+  update_config:
+    parallelism: 1
+    delay: 10s
+    order: start-first
+  rollback_config:
+    parallelism: 1
+    delay: 10s
+    order: stop-first
+  labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.dashboard.rule=Host(`traefik.${DOMAIN}`)"
+    - "traefik.http.routers.dashboard.entrypoints=websecure"
+    - "traefik.http.routers.dashboard.tls=true"
+    - "traefik.http.routers.dashboard.tls.certresolver=myresolver"
+    - "traefik.http.services.dashboard.loadbalancer.server.port=8080"
+
+services:
+  traefik:
+    image: traefik:v3.1
+    container_name: traefik
+    hostname: traefik
+    env_file:
+      - .env
+    command:
+      # FIXME: This is also defined in config.yml, so it should be removed from one of them
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--providers.swarm=true"
+      - "--providers.swarm.endpoint=unix:///var/run/docker.sock"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.websecure.address=:443"
+      # TODO: Change myresolver to your resolver name if you change it below
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=${ACME_EMAIL}"
+      - "--certificatesresolvers.myresolver.acme.storage=/data/acme.json"
+      - "--log.level=INFO"
+      - "--accesslog=true"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data:/data
+    networks:
+      - traefik-development
+    deploy:
+      <<: *default-deploy
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.dashboard.rule=Host(`traefik.${DOMAIN}`)"
+        - "traefik.http.routers.dashboard.entrypoints=websecure"
+        - "traefik.http.routers.dashboard.tls=true"
+        # TODO: Change myresolver to your resolver name if you change it above
+        - "traefik.http.routers.dashboard.tls.certresolver=myresolver"
+        - "traefik.http.services.dashboard.loadbalancer.server.port=8080"
+
+networks:
+  traefik-development:
+    external: true
