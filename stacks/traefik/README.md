@@ -22,4 +22,4 @@ docker stack deploy -c docker-compose.yml ${SERVICE_NAME}
 - Name: documentation
 - Repository URL: https://github.com/shackofnoreturn/shackhq-docker-swarm.git
 - Repository reference: refs/heads/dev
-- Compose path: stacks/traefik/docker-compose.traefik.yml
+- Compose path: stacks/traefik/docker-compose.yml
