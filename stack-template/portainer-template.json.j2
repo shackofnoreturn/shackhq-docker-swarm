@@ -1,0 +1,32 @@
+{
+  "type": 1,
+  "title": "{{ stack.title }}",
+  "description": "{{ stack.description }}",
+  "note": "Make sure to fill in your .env variables before deploying.",
+  # TODO LOOP CATEGORIES HERE
+  "categories": ["web", "backend"],
+  "platform": "linux",
+  "logo": "{{ stack.logo }}",
+  "repository": {
+    "url": "{{ stack.repository.url }}",
+    "stackfile": "{{ stack.repository.stackfile }}"
+  },
+  "env": [
+    // TODO LOOP SERVICE ENV VARS HERE
+    {
+      "name": "IMAGE_TAG",
+      "label": "Image Tag",
+      "default": "latest"
+    },
+    {
+      "name": "REPLICAS",
+      "label": "Replicas",
+      "default": "1"
+    },
+    {
+      "name": "APP_PORT_PUBLISHED",
+      "label": "Published Port",
+      "default": "8080"
+    }
+  ]
+}

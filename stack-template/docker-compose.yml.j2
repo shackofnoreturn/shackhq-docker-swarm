@@ -1,0 +1,12 @@
+services:
+{% for svc_name, svc in stack.services.items() %}
+  {{ svc_name }}:
+    image: {{ svc.image }}:{{ svc.version }}
+{% if svc.ports %}
+    ports:
+{% for port in svc.ports %}
+      - "{{ port }}"
+{% endfor %}
+{% endif %}
+
+{% endfor %}
