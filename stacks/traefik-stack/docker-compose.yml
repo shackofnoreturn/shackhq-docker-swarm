@@ -1,12 +1,12 @@
 services:
   traefik:
-    image: traefik:v3.1
+    image: traefik:v3.5.3
     ports:
       - "80:80"
       - "443:443"
 
   whois:
-    image: whoami:latest
+    image: traefik/whoami:latest
     ports:
       - "8080:8080"
 

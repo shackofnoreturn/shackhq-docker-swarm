@@ -15,14 +15,14 @@ stacks:
       traefik:
         title:      "Traefik Reverse Proxy"
         image:      "traefik"
-        version:    "v3.1"
+        version:    "v3.5.3"
         ports:
           - "80:80"
           - "443:443"
 
       whois:
-        title:      "WhoIs Test Service"
-        image:      "whois-service"
+        title:      "Whoami Test Service"
+        image:      "traefik/whoami"
         version:    "latest"
         ports:
           - "8080:8080"
