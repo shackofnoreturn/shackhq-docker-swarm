@@ -1,5 +1,0 @@
-# dynamic/tls.yaml
-tls:
-  certificates:
-    - certFile: /certs/traefik-dev.crt
-      keyFile:  /certs/traefik-dev.key
