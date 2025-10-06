@@ -6,7 +6,7 @@ services:
       - "443:443"
 
   whois:
-    image: whois-service:latest
+    image: whois:latest
     ports:
       - "8080:8080"
 
