@@ -1,0 +1,28 @@
+# stacks.yml
+stacks:
+  traefik-stack:
+    name:           "traefik-stack"
+    title:          "Traefik Stack"
+    description:    "Traefik reverse proxy with WhoIs service for testing."
+    categories:     ["web", "backend"]
+    logo:           "https://via.placeholder.com/128"
+    repository:
+      url:          "https://github.com/shackofnoreturn/shackhq-docker-swarm.git"
+      reference:    "refs/heads/dev"
+      stackfile:    "stacks/traefik/docker-compose.yml"
+
+    services:
+      traefik:
+        title:      "Traefik Reverse Proxy"
+        image:      "traefik"
+        version:    "v3.1"
+        ports:
+          - "80:80"
+          - "443:443"
+
+      whois:
+        title:      "WhoIs Test Service"
+        image:      "whois-service"
+        version:    "latest"
+        ports:
+          - "8080:8080"

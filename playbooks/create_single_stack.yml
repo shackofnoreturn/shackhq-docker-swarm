@@ -1,0 +1,20 @@
+---
+- name: Create a single stack
+  hosts: localhost
+  vars_files:
+    - ../stacks.yml
+  vars_prompt:
+    - name: selected_stack
+      prompt: "Enter the stack key (e.g. traefik-stack)"
+      private: no
+  vars:
+    project_root: "../stacks"
+    template_path: "../stack-template"
+
+  tasks:
+    - name: Create selected stack
+      include_tasks: create_one.yml
+      vars:
+        stack_item:
+          key: "{{ selected_stack }}"
+          value: "{{ stacks[selected_stack] }}"
