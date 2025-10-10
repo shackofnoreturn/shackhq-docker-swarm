@@ -5,7 +5,7 @@ stacks:
     title:          "Traefik Stack"
     description:    "Traefik reverse proxy with WhoIs service for testing."
     categories:     ["web", "backend"]
-    logo:           "https://via.placeholder.com/128"
+    logo:           "https://traefik.io/img/logo/traefik-logo.svg"
     repository:
       url:          "https://github.com/shackofnoreturn/shackhq-docker-swarm.git"
       reference:    "refs/heads/dev"
@@ -17,13 +17,26 @@ stacks:
         image:      "traefik"
         version:    "v3.5.3"
         ports:
-          - "80:80"
-          - "443:443"
-          - "8080:8080"
+        # TODO Remove port 80 in production
+          - target: "80"
+            published: "80"
+            protocol: tcp
+            mode: host
+          - target: "443"
+            published: "443"
+            protocol: tcp
+            mode: host
+          - target: "8080"
+            published: "8080"
+            protocol: tcp
+            mode: host
 
       whois:
         title:      "Whoami Test Service"
         image:      "traefik/whoami"
         version:    "v1.11.0"
         ports:
-          - "81:80"
+          - target: "80"
+            published: "8081"
+            protocol: tcp
+            mode: host

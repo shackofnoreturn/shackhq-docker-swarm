@@ -5,7 +5,10 @@ services:
 {% if svc.ports %}
     ports:
 {% for port in svc.ports %}
-      - "{{ port }}"
+      - target: {{ port.target }}
+        published: {{ port.published }}
+        protocol: {{ port.protocol }}
+        mode: {{ port.mode }}
 {% endfor %}
 {% endif %}
 

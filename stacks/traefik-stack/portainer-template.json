@@ -6,7 +6,7 @@
   # TODO LOOP CATEGORIES HERE
   "categories": ["web", "backend"],
   "platform": "linux",
-  "logo": "https://via.placeholder.com/128",
+  "logo": "https://traefik.io/img/logo/traefik-logo.svg",
   "repository": {
     "url": "https://github.com/shackofnoreturn/shackhq-docker-swarm.git",
     "stackfile": "stacks/traefik/docker-compose.yml"

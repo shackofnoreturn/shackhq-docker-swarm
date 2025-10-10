@@ -1,0 +1,1 @@
+stacks/traefik=http://10.0.0.23:9000/api/stacks/webhooks/0b50b4fd-9def-41aa-a1ea-90bb5360fc7b
