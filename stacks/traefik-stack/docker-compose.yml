@@ -9,5 +9,5 @@ services:
   whois:
     image: traefik/whoami:v1.11.0
     ports:
-      - "81:80" 
+      - "81:80"
 
