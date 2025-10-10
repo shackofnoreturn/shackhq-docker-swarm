@@ -1,4 +1,4 @@
-# stacks.yml
+# Stacks configuration file for ansible generator
 stacks:
   traefik-stack:
     name:           "traefik-stack"
@@ -19,10 +19,11 @@ stacks:
         ports:
           - "80:80"
           - "443:443"
+          - "8080:8080"
 
       whois:
         title:      "Whoami Test Service"
         image:      "traefik/whoami"
-        version:    "latest"
+        version:    "v1.11.0"
         ports:
-          - "8080:8080"
+          - "81:80"

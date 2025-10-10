@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Stacks: Generate",
+      "type": "shell",
+      "command": "ansible-playbook playbooks/create_stack.yml",
+      "problemMatcher": []
+    },
+    {
+      "label": "Stacks: Purge & Generate",
+      "type": "shell",
+      "command": "ansible-playbook playbooks/create_stack.yml",
+      "problemMatcher": []
+    },
+    {
+      "label": "Stacks: Generate & Push",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "ansible-playbook playbooks/create_stack.yml -e cleanup=true && \\",
+        "git add . && \\",
+        "if git diff --cached --quiet; then \\",
+        "  echo '✅ No changes to commit or push'; \\",
+        "else \\",
+        "  msg=\"Auto commit ($(date '+%Y-%m-%d %H:%M:%S'))\"; \\",
+        "  git commit -m \"$msg\" && \\",
+        "  echo \"💾 $msg\" && \\",
+        "  git push && \\",
+        "  echo '🚀 Changes pushed to remote'; \\",
+        "fi"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}

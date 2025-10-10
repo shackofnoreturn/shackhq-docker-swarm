@@ -6,6 +6,7 @@
   vars:
     project_root: "../stacks"
     template_path: "../stack-template"
+    cleanup: false
 
   tasks:
     - name: Loop through all stacks
