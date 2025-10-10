@@ -1,15 +1,21 @@
 services:
-{% for svc_name, svc in stack.services.items() %}
-  {{ svc_name }}:
-    image: {{ svc.image }}:{{ svc.version }}
-{% if svc.ports %}
+{% for service_name, service in stack.services.items() %}
+  {{ service_name }}:
+    image: {{ service.image }}:{{ service.version }}
+{% if service.ports %}
     ports:
-{% for port in svc.ports %}
+{% for port in service.ports %}
       - target: {{ port.target }}
         published: {{ port.published }}
-        protocol: {{ port.protocol }}
-        mode: {{ port.mode }}
+        protocol: tcp
+        mode: host
 {% endfor %}
 {% endif %}
-
+  configs:
+    - source: app_config
+      target: /etc/myapp/config.yaml
 {% endfor %}
+
+configs:
+  app_config:
+    file: ./configs/app_config.yml

@@ -30,8 +30,9 @@ stacks:
             published: "8080"
             protocol: tcp
             mode: host
+        configs:
 
-      whois:
+      whoami:
         title:      "Whoami Test Service"
         image:      "traefik/whoami"
         version:    "v1.11.0"
