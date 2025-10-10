@@ -11,9 +11,9 @@ services:
         mode: host
 {% endfor %}
 {% endif %}
-  configs:
-    - source: app_config
-      target: /etc/myapp/config.yaml
+    configs:
+      - source: app_config
+        target: /etc/myapp/config.yaml
 {% endfor %}
 
 configs:

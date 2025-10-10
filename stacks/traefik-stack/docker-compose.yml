@@ -14,9 +14,9 @@ services:
         published: 8080
         protocol: tcp
         mode: host
-  configs:
-    - source: app_config
-      target: /etc/myapp/config.yaml
+    configs:
+      - source: app_config
+        target: /etc/myapp/config.yaml
   whoami:
     image: traefik/whoami:v1.11.0
     ports:
@@ -24,9 +24,9 @@ services:
         published: 8081
         protocol: tcp
         mode: host
-  configs:
-    - source: app_config
-      target: /etc/myapp/config.yaml
+    configs:
+      - source: app_config
+        target: /etc/myapp/config.yaml
 
 configs:
   app_config:
