@@ -11,11 +11,11 @@ services:
         mode: host
 {% endfor %}
 {% endif %}
-    configs:
-      - source: app_config
-        target: /etc/myapp/config.yaml
+    # configs:
+    #   - source: app_config
+    #     target: /etc/myapp/config.yaml
 {% endfor %}
 
-configs:
-  app_config:
-    file: ./configs/app_config.yml
+# configs:
+#   app_config:
+#     file: ./configs/app_config.yml
