@@ -1,6 +1,23 @@
 services:
   traefik:
     image: traefik:v3.5.3
+    command:
+      # FIXME: This is also defined in confg
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--providers.file.filename=/dynamic/tls.yml"
+      - "--providers.swarm=true"
+      - "--providers.swarm.endpoint=unix:///var/run/docker.sock"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.websecure.address=:443"
+      # TODO: Change myresolver to your resolver name if you change it below
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=shackofnoreturn@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/certs/acme.json"
+      - "--log.level=INFO"
+      - "--accesslog=true"
+      - "--metrics.prometheus=true"
     ports:
       - target: 80
         published: 80
@@ -19,6 +36,23 @@ services:
     #     target: /etc/myapp/config.yaml
   whoami:
     image: traefik/whoami:v1.11.0
+    command:
+      # FIXME: This is also defined in confg
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--providers.file.filename=/dynamic/tls.yml"
+      - "--providers.swarm=true"
+      - "--providers.swarm.endpoint=unix:///var/run/docker.sock"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.websecure.address=:443"
+      # TODO: Change myresolver to your resolver name if you change it below
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=shackofnoreturn@gmail.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/certs/acme.json"
+      - "--log.level=INFO"
+      - "--accesslog=true"
+      - "--metrics.prometheus=true"
     ports:
       - target: 80
         published: 8081
