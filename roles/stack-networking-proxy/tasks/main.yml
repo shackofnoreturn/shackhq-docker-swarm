@@ -1,0 +1,8 @@
+---
+# /roles/traefik-stack/tasks/main.yml
+
+- name: Render docker compose for Traefik
+  ansible.builtin.template:
+    src: docker-compose.traefik.yml.j2
+    dest: "{{ role_path }}/files/docker-compose.traefik-stack.yml"
+    mode: "0644"

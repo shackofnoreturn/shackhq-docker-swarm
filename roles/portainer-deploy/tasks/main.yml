@@ -1,0 +1,127 @@
+---
+# /roles/portainer-deploy/tasks/main.yml
+
+# PREPARE - Stack Data
+- name: Load "{{ target_stack }}" vars
+  include_vars:
+    file: "{{ playbook_dir }}/../roles/{{ target_stack }}/vars/main.yml"
+  tags: always
+
+- name: Load "{{ target_stack }}" compose file
+  set_fact:
+    resolved_compose_file: "{{ playbook_dir }}/../roles/{{ target_stack }}/files/docker-compose.yml"
+
+
+# ACCESS - Portainer API
+- name: Get Portainer auth token
+  ansible.builtin.uri:
+    url: "{{ portainer.url }}/auth"
+    method: POST
+    body_format: json
+    body:
+      username: "{{ portainer.username }}"
+      password: "{{ portainer.password }}"
+    return_content: true
+  register: portainer_auth
+  no_log: true
+
+- name: Get JWT token from response
+  set_fact:
+    portainer_jwt: "{{ portainer_auth.json.jwt }}"
+
+
+# CHECK - Swarm Info
+
+# - name: Get list of Portainer environments
+#   ansible.builtin.uri:
+#     url: "{{ portainer.url }}/endpoints"
+#     method: GET
+#     headers:
+#       Authorization: "Bearer {{ portainer_token }}"
+#     return_content: true
+#   register: portainer_envs
+
+# - name: Show only Portainer endpoint summary
+#   debug:
+#     msg: >-
+#       {{ portainer_envs.json
+#          | map(attribute='Name')
+#          | zip(portainer_envs.json | map(attribute='Id'))
+#          | map('join', ' (ID: ')
+#          | map('regex_replace', '$', ')')
+#          | list }}
+
+- name: Get swarm info
+  ansible.builtin.uri:
+    url: "{{ portainer.url }}/endpoints/{{ portainer.endpoint }}/docker/swarm"
+    headers:
+      Authorization: "Bearer {{ portainer_jwt }}"
+    method: GET
+    return_content: true
+  register: swarm_info
+
+- name: Get Swarm ID
+  set_fact:
+    swarm_id: "{{ swarm_info.json.ID }}"
+
+- name: Get all existing stacks
+  uri:
+    url: "{{ portainer.url }}/stacks"
+    method: GET
+    headers:
+      Authorization: "Bearer {{ portainer_jwt }}"
+    return_content: true
+  register: stack_list
+
+- name: Find existing stack ID (if any)
+  ansible.builtin.set_fact:
+    existing_stack: "{{ stack_list.json | selectattr('Name', 'equalto', target_stack) | list | first | default(None) }}"
+    existing_stack_id: "{{ existing_stack.Id | default(None) }}"
+
+
+# DEPLOY - Portainer stack
+- name: Create stack {{ target_stack }}
+  when: existing_stack is none
+  ansible.builtin.uri:
+    url: "{{ portainer.url }}/stacks/create/swarm/repository?endpointId={{ portainer.endpoint }}"
+    method: POST
+    headers:
+      Authorization: "Bearer {{ portainer_jwt }}"
+      Content-Type: "application/json"
+    body_format: json
+    body:
+      composeFile: "{{ stack.compose_path }}"
+      env: []
+      name: "{{ stack.name }}"
+      repositoryAuthentication: false
+      repositoryReferenceName: "{{ stack.repo_branch }}"
+      RepositoryURL: "{{ stack.repo_url }}"
+      SwarmID: "{{ swarm_id }}" 
+    return_content: true
+    status_code: [200, 201]
+  register: portainer_stack_create
+
+# UPDATE - Portainer stack
+- name: Update stack {{ stack.name }}
+  when: existing_stack is not none
+  ansible.builtin.uri:
+    url: "{{ portainer.url }}/stacks/{{ existing_stack.Id }}?endpointId={{ portainer.endpoint }}"
+    method: PUT
+    headers:
+      Authorization: "Bearer {{ portainer_jwt }}"
+    body_format: form-multipart
+    body:
+      StackFileContent: "{{ compose_raw.content | b64decode }}"
+    return_content: true
+  register: portainer_stack_update
+
+
+# CHECK - Final result
+- name: Display final Portainer API result
+  ansible.builtin.debug:
+    msg: >-
+      {% if existing_stack is not none %}
+      ✅ Updated and redeployed existing stack '{{ stack.name }}' (ID {{ existing_stack_id }}).
+      {% else %}
+      ✅ Created new stack '{{ stack.name }}'.
+      {% endif %}

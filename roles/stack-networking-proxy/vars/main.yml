@@ -1,0 +1,39 @@
+# TRAEFIK STACK CONFIGURATION
+stack:
+  name: proxy-networking-stack
+  repo_url: "https://github.com/shackofnoreturn/shackhq-docker-swarm"
+  # compose_path: "roles/traefik-stack/files/docker-compose.traefik-stack.yml"
+  compose_path: "stacks/traefik-stack/docker-compose.yml"
+  repo_branch: "refs/heads/dev"
+  repo_auth: false
+
+traefik:
+  version: "2.2"
+  network: traefik-dev
+  expose_internally: true
+  expose_externally: false
+  https_only: false
+  service_domain: traefik.dev.local
+  auth: false
+  dns_challenge_provider: false
+
+whoami:
+  version: "1.6.0"
+
+# TODO: Move to group_vars/all.yml
+authelia:
+  enable: false
+
+tor:
+  enable: false
+  domain: ""
+
+domain: dev.local
+volumes_root: ""
+
+portainer:
+  url: "http://10.0.0.23:9000/api"
+  username: "root"
+  password: "Ackou1736jens"
+  endpoint: 4
+

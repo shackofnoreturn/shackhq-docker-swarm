@@ -1,0 +1,109 @@
+---
+# TRAEFIK STACK - TRAEFIK & WHOAMI SERVICE
+name: {{ stack.name | default('traefik-stack') }}
+
+networks:
+  {{ traefik.network | default('traefik-network') }}:
+
+configs: {}
+
+secrets: {}
+
+# volumes:
+#   traefik_data:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: 
+#       o: bind
+
+services:
+  # TRAEFIK - LOAD BALANCER / SSL / WEB SERVER
+  traefik:
+    container_name: traefik
+    image: traefik:{{ traefik.version | default('latest') }}
+    restart: always
+    # command:
+    #   - "--providers.docker.swarmmode=true"
+    #   - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+    #   - "--providers.docker.exposedbydefault=false"
+    #   - "--entrypoints.web.address=:80"
+    #   - "--entrypoints.websecure.address=:443"
+    #   - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+    #   - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+    #   - "--certificatesresolvers.myresolver.acme.email=acme_email"
+    #   - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    #   - "--log.level=DEBUG"
+    #   - "--api.dashboard=true"
+    networks:
+      - {{ traefik.network | default('traefik-network') }}
+    ports:
+    {% if traefik.expose_internally %}
+      - target: 8181
+        published: 8080
+        protocol: tcp
+        mode: host
+    {% endif %}
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+      # - target: 2222
+      #   published: 2222
+      #   protocol: tcp
+      #   mode: host
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      # - "{{ volumes_root }}/traefik/traefik.yaml:/traefik.yaml"
+      # - "{{ volumes_root }}/traefik/basicAuth:/basicAuth"
+      # - "{{ volumes_root }}/traefik/conf.d/:/conf.d/"
+      # - "{{ volumes_root }}/traefik/acme.json:/acme.json"
+      # ALT
+      # - "traefik_data:/letsencrypt"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+# {% if traefik.expose_externally %}
+#       labels:
+#         - "traefik.enable=true"
+#         - "traefik.docker.network={{ traefik.network | default('traefik-network') }}"
+#         - "traefik.http.routers.traefik-http.rule=Host(`{{ service_domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+#         - "traefik.http.routers.traefik-http.entrypoints=http"
+#         - "traefik.http.routers.traefik-http.service=api@internal"
+#         - "traefik.http.routers.traefik-http.middlewares={% if traefik.https_only %}redirect@file, {% else %}{% if traefik.auth %}{% if authelia.enable %}authelia@file{% else %}basicAuth@file{% endif %}, {% endif %}{% endif %}customFrameHomelab@file"
+#         - "traefik.http.routers.traefik.rule=Host(`{{ traefik.service_domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+#         - "traefik.http.routers.traefik.entrypoints=https"
+#         - "traefik.http.routers.traefik.middlewares={% if traefik.auth %}{% if authelia.enable %}authelia@file{% else %}basicAuth@file{% endif %}, {% endif %}customFrameHomelab@file"
+#         - "traefik.http.routers.traefik.tls=true"
+# {% if traefik.dns_challenge_provider %}
+#       - "traefik.http.routers.traefik.tls.certresolver=dns"
+#       - "traefik.http.routers.traefik.tls.domains[0].main={{ domain }}"
+#       - "traefik.http.routers.traefik.tls.domains[0].sans=*.{{ domain }}"
+# {% else %}
+#       - "traefik.http.routers.traefik.tls.certresolver=http"
+# {% endif %}
+#         - "traefik.http.routers.traefik.service=api@internal"
+# {% if tor.enable %}
+#       - "traefik.http.routers.traefik-tor-http.rule=Host(`{{ tor.domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+#       - "traefik.http.routers.traefik-tor-http.entrypoints=http"
+#       - "traefik.http.routers.traefik-tor-http.service=api@internal"
+#       - "traefik.http.routers.traefik-tor-http.middlewares={% if traefik.auth %}{% if authelia.enable %}authelia-tor@file{% else %}basicAuth@file{% endif %}, {% endif %}customFrameHomelab-tor@file"
+# {% endif %}
+# {% endif %}
+
+  whoami:
+    image: "containous/whoami:{{ whoami.version | default('latest') }}"
+    networks:
+      - {{ traefik.network }}
+    # deploy:
+    #   labels:
+    #     - "traefik.enable=true"
+    #     - "traefik.http.routers.whoami.rule=Host(`whoami.{{ domain }}`)"
+    #     - "traefik.http.routers.whoami.entrypoints=websecure"
+    #     - "traefik.http.routers.whoami.tls.certresolver=myresolver"
+    #     - "traefik.http.services.whoami.loadbalancer.server.port=80"
