@@ -9,7 +9,7 @@
 
 - name: Load "{{ target_stack }}" compose file
   set_fact:
-    resolved_compose_file: "{{ playbook_dir }}/../roles/{{ target_stack }}/files/docker-compose.{{ stack.name }}.yml"
+    resolved_compose_file: "roles/{{ target_stack }}/files/docker-compose.{{ stack.name }}.yml"
 
 
 # ACCESS - Portainer API
