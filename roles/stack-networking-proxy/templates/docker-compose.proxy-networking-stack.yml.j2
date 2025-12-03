@@ -1,7 +1,9 @@
 ---
 # {{ stack.full_name }}
 # {{ stack.description }}
+{#
 name: {{ stack.name }}
+#}
 
 networks:
   {{ traefik.network | default('traefik-network') }}:

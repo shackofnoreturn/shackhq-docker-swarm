@@ -1,7 +1,6 @@
 ---
 # Proxy Networking Stack
 # Networking proxy stack including Traefik load balancer and Whoami for testing.
-name: proxy-networking-stack
 
 networks:
   traefik-dev:
