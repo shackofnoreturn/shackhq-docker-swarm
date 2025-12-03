@@ -1,6 +1,7 @@
 # ShackHQ Docker Swarm
     *A collection of Docker Swarm stack files & templates to be deployed in Portainer*
 
+
 ## What
 - Renders complete and highly configurable docker compose stack files straight from a jinja template
 - Alter variables for different environments
@@ -15,10 +16,14 @@
 
 
 ## How
-```ansible-playbook playbooks/portainer-deploy-stacks.yml --ask-vault-pass```
+### Render
+```ansible-playbook playbooks/stacks-render.yml```
+
+### Deploy
+```ansible-playbook playbooks/stack-networking-proxy.yml --ask-vault-pass```
 
 
 ## Todo
-[] portainer-deploy
-[] stack-networking-traefik
-[] stack-utility-documentation
+[] Render complete and proper networking-proxy stack
+[] Remove stack from Portainer
+[] Deploy successfully from empty Portainer stack
