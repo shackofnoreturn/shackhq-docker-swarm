@@ -37,3 +37,12 @@ ansible-playbook playbooks/stack-networking-proxy.yml --ask-vault-pass`
 - [ ] Render complete and proper networking-proxy stack
 - [ ] Remove stack from Portainer
 - [ ] Deploy successfully from empty Portainer stack
+- [ ] Enable GitOps updates
+- [ ] Try using environment variables (stack.env in same dir)
+- [ ] Prune services option
+- [ ] Pull & Redepoloy existing stack
+- [ ] Stack duplication / migration
+- [ ] List existing stacks/services
+- [ ] Access control?
+- [ ] Stopping Stack
+- [ ] Render: Make sure logo and icons are present
