@@ -35,6 +35,6 @@ services:
           - node.role == manager
 
   whoami:
-    image: "containous/whoami:1.6.0"
+    image: "traefik/whoami:1.6.0"
     networks:
       - traefik-dev
