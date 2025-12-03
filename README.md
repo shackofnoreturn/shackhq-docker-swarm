@@ -1,5 +1,6 @@
 # ShackHQ Docker Swarm
-    *A collection of Docker Swarm stack files & templates to be deployed in Portainer*
+
+  *A collection of Docker Swarm stack files & templates to be deployed in Portainer*
 
 
 ## What
@@ -17,13 +18,22 @@
 
 ## How
 ### Render
-```ansible-playbook playbooks/stacks-render.yml```
+*This renders docker compose files to create stacks.*
+
+```bash
+ansible-playbook playbooks/stacks-render.yml
+```
+
 
 ### Deploy
-```ansible-playbook playbooks/stack-networking-proxy.yml --ask-vault-pass```
+*This deploys stacks in Portainer from the generated docker compose files*
+
+```bash
+ansible-playbook playbooks/stack-networking-proxy.yml --ask-vault-pass`
+```
 
 
 ## Todo
-[] Render complete and proper networking-proxy stack
-[] Remove stack from Portainer
-[] Deploy successfully from empty Portainer stack
+- [ ] Render complete and proper networking-proxy stack
+- [ ] Remove stack from Portainer
+- [ ] Deploy successfully from empty Portainer stack
