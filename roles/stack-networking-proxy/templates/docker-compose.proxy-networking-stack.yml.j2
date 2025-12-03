@@ -110,7 +110,7 @@ services:
 #}
 
   whoami:
-    image: "containous/whoami:{{ whoami.version | default('latest') }}"
+    image: "traefik/whoami:{{ whoami.version | default('latest') }}"
     networks:
       - {{ traefik.network }}
 {#

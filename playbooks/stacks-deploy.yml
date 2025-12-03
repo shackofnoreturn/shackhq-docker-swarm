@@ -1,5 +1,5 @@
 ---
-# playbooks/portainer-deploy-stacks.yml
+# playbooks/stacks-deploy.yml
 
 - name: Deploy all Portainer stacks
   hosts: localhost
