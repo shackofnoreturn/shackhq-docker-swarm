@@ -9,7 +9,7 @@
 
 - name: Load "{{ target_stack }}" compose file
   set_fact:
-    resolved_compose_file: "{{ playbook_dir }}/../roles/{{ target_stack }}/files/docker-compose.yml"
+    resolved_compose_file: "{{ playbook_dir }}/../roles/{{ target_stack }}/files/docker-compose.{{ stack.name }}.yml"
 
 
 # ACCESS - Portainer API
@@ -90,7 +90,7 @@
       Content-Type: "application/json"
     body_format: json
     body:
-      composeFile: "{{ stack.compose_path }}"
+      composeFile: "{{ resolved_compose_file }}"
       env: []
       name: "{{ stack.name }}"
       repositoryAuthentication: false
@@ -102,18 +102,40 @@
   register: portainer_stack_create
 
 # UPDATE - Portainer stack
-- name: Update stack {{ stack.name }}
+# - name: Update stack {{ stack.name }}
+#   when: existing_stack is not none
+#   ansible.builtin.uri:
+#     url: "{{ portainer.url }}/stacks/{{ existing_stack.Id }}?endpointId={{ portainer.endpoint }}"
+#     method: PUT
+#     headers:
+#       Authorization: "Bearer {{ portainer_jwt }}"
+#     body_format: form-multipart
+#     body:
+#       StackFileContent: "{{ compose_raw.content | b64decode }}"
+#     return_content: true
+#   register: portainer_stack_update
+
+- name: Update existing stack {{ target_stack }}
   when: existing_stack is not none
   ansible.builtin.uri:
-    url: "{{ portainer.url }}/stacks/{{ existing_stack.Id }}?endpointId={{ portainer.endpoint }}"
-    method: PUT
+    url: "{{ portainer.url }}/stacks/{{ existing_stack_id }}/update/swarm/repository?endpointId={{ portainer.endpoint }}"
+    method: POST
     headers:
       Authorization: "Bearer {{ portainer_jwt }}"
-    body_format: form-multipart
+      Content-Type: "application/json"
+    body_format: json
     body:
-      StackFileContent: "{{ compose_raw.content | b64decode }}"
+      composeFile: "{{ resolved_compose_file }}"
+      env: []
+      repositoryAuthentication: false
+      repositoryReferenceName: "{{ stack.repo_branch }}"
+      RepositoryURL: "{{ stack.repo_url }}"
+      SwarmID: "{{ swarm_id }}"
+      pullImage: true
     return_content: true
+    status_code: [200]
   register: portainer_stack_update
+
 
 
 # CHECK - Final result
