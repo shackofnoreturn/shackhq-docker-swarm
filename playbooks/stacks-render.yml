@@ -1,0 +1,9 @@
+---
+# playbooks/stacks-render.yml
+
+- name: Render all stack templates
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  roles:
+    - stack-networking-proxy
