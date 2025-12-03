@@ -1,6 +1,6 @@
 ---
 # TRAEFIK STACK - TRAEFIK & WHOAMI SERVICE
-name: traefik-stack
+name: proxy-networking-stack
 
 networks:
   traefik-dev:
@@ -38,11 +38,11 @@ services:
     networks:
       - traefik-dev
     ports:
-          - target: 8181
+      - target: 8181
         published: 8080
         protocol: tcp
         mode: host
-          - target: 80
+      - target: 80
         published: 80
         protocol: tcp
         mode: host
@@ -66,7 +66,7 @@ services:
       placement:
         constraints:
           - node.role == manager
-# 
+
   whoami:
     image: "containous/whoami:1.6.0"
     networks:

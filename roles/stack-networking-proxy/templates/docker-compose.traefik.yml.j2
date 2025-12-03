@@ -38,12 +38,12 @@ services:
     networks:
       - {{ traefik.network | default('traefik-network') }}
     ports:
-    {% if traefik.expose_internally %}
+{% if traefik.expose_internally %}
       - target: 8181
         published: 8080
         protocol: tcp
         mode: host
-    {% endif %}
+{% endif %}
       - target: 80
         published: 80
         protocol: tcp
@@ -68,7 +68,7 @@ services:
       placement:
         constraints:
           - node.role == manager
-# {% if traefik.expose_externally %}
+{% if traefik.expose_externally %}
 #       labels:
 #         - "traefik.enable=true"
 #         - "traefik.docker.network={{ traefik.network | default('traefik-network') }}"
@@ -80,21 +80,21 @@ services:
 #         - "traefik.http.routers.traefik.entrypoints=https"
 #         - "traefik.http.routers.traefik.middlewares={% if traefik.auth %}{% if authelia.enable %}authelia@file{% else %}basicAuth@file{% endif %}, {% endif %}customFrameHomelab@file"
 #         - "traefik.http.routers.traefik.tls=true"
-# {% if traefik.dns_challenge_provider %}
+{% if traefik.dns_challenge_provider %}
 #       - "traefik.http.routers.traefik.tls.certresolver=dns"
 #       - "traefik.http.routers.traefik.tls.domains[0].main={{ domain }}"
 #       - "traefik.http.routers.traefik.tls.domains[0].sans=*.{{ domain }}"
-# {% else %}
+{% else %}
 #       - "traefik.http.routers.traefik.tls.certresolver=http"
-# {% endif %}
+{% endif %}
 #         - "traefik.http.routers.traefik.service=api@internal"
-# {% if tor.enable %}
+{% if tor.enable %}
 #       - "traefik.http.routers.traefik-tor-http.rule=Host(`{{ tor.domain }}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
 #       - "traefik.http.routers.traefik-tor-http.entrypoints=http"
 #       - "traefik.http.routers.traefik-tor-http.service=api@internal"
 #       - "traefik.http.routers.traefik-tor-http.middlewares={% if traefik.auth %}{% if authelia.enable %}authelia-tor@file{% else %}basicAuth@file{% endif %}, {% endif %}customFrameHomelab-tor@file"
-# {% endif %}
-# {% endif %}
+{% endif %}
+{% endif %}
 
   whoami:
     image: "containous/whoami:{{ whoami.version | default('latest') }}"
