@@ -5,17 +5,6 @@
 networks:
   traefik-dev:
 
-configs: {}
-
-secrets: {}
-
-volumes:
-  traefik_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: 
-      o: bind
 
 services:
   # TRAEFIK - LOAD BALANCER / SSL / WEB SERVER
@@ -46,6 +35,6 @@ services:
           - node.role == manager
 
   whoami:
-    image: "traefik/whoami:1.6.0"
+    image: "traefik/whoami:1.11.0"
     networks:
       - traefik-dev
