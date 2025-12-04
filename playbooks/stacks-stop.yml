@@ -1,0 +1,11 @@
+---
+# playbooks/stacks-stop.yml
+
+- name: Stops all Portainer stacks
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    target_stack: stack-networking-proxy
+  roles:
+    - portainer-stop

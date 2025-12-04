@@ -1,16 +1,11 @@
 ---
-# roles/portainer-deploy/tasks/main.yml
+# /roles/portainer-start/tasks/main.yml
 
 # PREPARE - Stack Data
 - name: Load "{{ target_stack }}" vars
   include_vars:
     file: "{{ playbook_dir }}/../roles/{{ target_stack }}/vars/main.yml"
   tags: always
-
-- name: Load "{{ stack.name }}" compose file
-  set_fact:
-    resolved_compose_file: "roles/{{ target_stack }}/files/docker-compose.{{ stack.name }}.yml"
-  
 
 # ACCESS - Portainer API
 - name: Get Portainer auth token
@@ -94,49 +89,18 @@
     existing_stack_id: "{{ existing_stack.Id | default(None) }}"
 
 
-# DEPLOY - Portainer stack
-- name: Create stack {{ stack.name }}
-  when: existing_stack is none
+# START - Portainer stack
+- name: Starting stack {{ stack.name }}
+  when: existing_stack is not none
   ansible.builtin.uri:
-    url: "{{ portainer.url }}/stacks/create/swarm/repository?endpointId={{ portainer.endpoint }}"
+    url: "{{ portainer.url }}/stacks/{{ existing_stack_id }}/start?endpointId={{ portainer.endpoint }}"
     method: POST
     headers:
       Authorization: "Bearer {{ portainer_jwt }}"
       Content-Type: "application/json"
-    body_format: json
-    body:
-      composeFile: "{{ resolved_compose_file }}"
-      env: []
-      name: "{{ stack.name }}"
-      repositoryAuthentication: false
-      repositoryReferenceName: "{{ stack.repo_branch }}"
-      RepositoryURL: "{{ stack.repo_url }}"
-      SwarmID: "{{ swarm_info.json.ID }}" 
     return_content: true
     status_code: [200, 201]
-  register: portainer_stack_create
-
-# UPDATE - Portainer stack
-- name: Update existing {{ stack.name }}
-  when: existing_stack is not none
-  ansible.builtin.uri:
-    url: "{{ portainer.url }}/stacks/{{ existing_stack_id }}/git/redeploy?endpointId={{ portainer.endpoint }}"
-    method: PUT
-    headers:
-      Authorization: "Bearer {{ portainer_jwt }}"
-      Content-Type: "application/json"
-    body_format: json
-    body:
-      env: []
-      name: "{{ stack.name }}"
-      prune: true
-      pullImage": false
-      repositoryAuthentication: false
-      repositoryReferenceName: "{{ stack.repo_branch }}"
-    return_content: true
-    status_code: [200]
-  register: portainer_stack_update
-
+  register: portainer_stack_start
 
 
 # CHECK - Final result
@@ -144,7 +108,7 @@
   ansible.builtin.debug:
     msg: >-
       {% if existing_stack is not none %}
-      ✅ Updated and redeployed existing stack '{{ stack.name }}' (ID {{ existing_stack_id }}).
+      ✅ Started '{{ stack.name }}' (ID {{ existing_stack_id }}).
       {% else %}
-      ✅ Created new stack '{{ stack.name }}'.
+      ✅ Stack '{{ stack.name }}' was not found.
       {% endif %}

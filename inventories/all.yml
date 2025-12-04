@@ -1,0 +1,7 @@
+---
+# inventories/all.yml
+
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
