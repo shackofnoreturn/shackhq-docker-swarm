@@ -1,0 +1,49 @@
+---
+# roles/portainer-push/tasks/main.yml
+
+# - name: Load "{{ stack.name }}" compose file
+#   set_fact:
+#     resolved_compose_file: "roles/{{ target_stack }}/files/docker-compose.{{ stack.name }}.yml"
+
+- name: Ensure git repo exists
+  stat:
+    path: "{{ git_repo_path }}/.git"
+  register: git_repo
+
+- name: Fail if not a git repository
+  fail:
+    msg: "Directory {{ git_repo_path }} is not a git repository"
+  when: not git_repo.stat.exists
+
+- name: Check git status
+  command: git status --porcelain
+  args:
+    chdir: "{{ git_repo_path }}"
+  register: git_status
+  changed_when: false
+
+- name: Skip if no changes detected
+  debug:
+    msg: "No changes detected — skipping commit"
+  when: git_status.stdout == ""
+
+- name: Stage all changes
+  command: git add .
+  args:
+    chdir: "{{ git_repo_path }}"
+  when: git_status.stdout != ""
+
+- name: Commit changes
+  command: >
+    git commit
+    -m "{{ git_commit_message }}"
+    --author="{{ git_author_name }} <{{ git_author_email }}>"
+  args:
+    chdir: "{{ git_repo_path }}"
+  when: git_status.stdout != ""
+
+- name: Push changes
+  command: git push origin "{{ git_branch }}"
+  args:
+    chdir: "{{ git_repo_path }}"
+  when: git_status.stdout != ""

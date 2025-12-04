@@ -1,0 +1,8 @@
+---
+# roles/portainer-push/defaults/main.yml
+
+git_repo_path: "{{ role_path }}/../.."
+git_commit_message: "Auto-rendered stack update"
+git_branch: "dev"
+git_author_name: "Ansible Bot"
+git_author_email: "ansible@local"

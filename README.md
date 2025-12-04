@@ -34,10 +34,7 @@ ansible-playbook playbooks/stack-networking-proxy.yml --ask-vault-pass`
 
 
 ## Todo
+- [ ] Push to repo through ansible
+- [ ] "All" playbook operational
 - [ ] Enable GitOps updates
-- [ ] Try using environment variables (stack.env in same dir)
-- [ ] Stack duplication / migration
-- [ ] List existing stacks/services
-- [ ] Access control?
-- [ ] Render: Make sure logo and icons are present
-- [ ] Portainer backup and restore: https://app.swaggerhub.com/apis/portainer/portainer-ce/2.33.5#/backup/Backup
+

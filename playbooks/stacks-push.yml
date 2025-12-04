@@ -1,0 +1,11 @@
+---
+# playbooks/stacks-push.yml
+
+- name: Pushes all Portainer stacks to repo
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    target_stack: stack-networking-proxy
+  roles:
+    - portainer-push
