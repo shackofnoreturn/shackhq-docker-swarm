@@ -105,13 +105,19 @@
       Content-Type: "application/json"
     body_format: json
     body:
+      # additionalFiles: [ "[nz.compose.yml", " uat.compose.yml]" ]
+      # autoUpdate: { "forcePullImage": false, "forceUpdate": false, "interval": "1m30s", "jobID": "15", "webhook": "05de31a2-79fa-4644-9c12-faa67e5c49f0" }
       composeFile: "{{ resolved_compose_file }}"
       env: []
+      # fromAppTemplate: false
       name: "{{ stack.name }}"
       repositoryAuthentication: false
+      # repositoryPassword: "myGitPassword"
       repositoryReferenceName: "{{ stack.repo_branch }}"
-      RepositoryURL: "{{ stack.repo_url }}"
-      SwarmID: "{{ swarm_info.json.ID }}" 
+      repositoryURL: "{{ stack.repo_url }}"
+      # repositoryUsername: "myGitUsername"
+      SwarmID: "{{ swarm_info.json.ID }}"
+      # tlsskipVerify: false
     return_content: true
     status_code: [200, 201]
   register: portainer_stack_create

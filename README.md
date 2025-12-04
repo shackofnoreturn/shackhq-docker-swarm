@@ -35,4 +35,4 @@ ansible-playbook playbooks/stack-networking-proxy.yml --ask-vault-pass`
 
 ## Todo
 - [ ] Enable GitOps updates
-
+- [ ] Access Traefik dashboard
