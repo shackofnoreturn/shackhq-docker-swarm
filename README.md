@@ -34,7 +34,5 @@ ansible-playbook playbooks/stack-networking-proxy.yml --ask-vault-pass`
 
 
 ## Todo
-- [ ] Push to repo through ansible
-- [ ] "All" playbook operational
 - [ ] Enable GitOps updates
 

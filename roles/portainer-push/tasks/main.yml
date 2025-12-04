@@ -1,9 +1,9 @@
 ---
 # roles/portainer-push/tasks/main.yml
 
-# - name: Load "{{ stack.name }}" compose file
-#   set_fact:
-#     resolved_compose_file: "roles/{{ target_stack }}/files/docker-compose.{{ stack.name }}.yml"
+- name: Set git commit target path
+  set_fact:
+    git_commit_target_path: "roles/{{ target_stack }}"
 
 - name: Ensure git repo exists
   stat:
@@ -15,25 +15,30 @@
     msg: "Directory {{ git_repo_path }} is not a git repository"
   when: not git_repo.stat.exists
 
-- name: Check git status
-  command: git status --porcelain
+- name: Ensure commit target is defined
+  fail:
+    msg: "git_commit_target_path must be set (e.g. roles/stack-network-proxy)"
+  when: git_commit_target_path | length == 0
+
+- name: Check git status for target path only
+  command: git status --porcelain "{{ git_commit_target_path }}"
   args:
     chdir: "{{ git_repo_path }}"
   register: git_status
   changed_when: false
 
-- name: Skip if no changes detected
+- name: Skip if no changes in target path
   debug:
-    msg: "No changes detected — skipping commit"
+    msg: "No changes detected in {{ git_commit_target_path }} — skipping commit"
   when: git_status.stdout == ""
 
-- name: Stage all changes
-  command: git add .
+- name: Stage ONLY target path
+  command: git add "{{ git_commit_target_path }}"
   args:
     chdir: "{{ git_repo_path }}"
   when: git_status.stdout != ""
 
-- name: Commit changes
+- name: Commit ONLY target path
   command: >
     git commit
     -m "{{ git_commit_message }}"

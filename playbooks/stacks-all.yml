@@ -1,12 +1,9 @@
 ---
 # playbooks/stacks-all.yml
-
-- name: Complete Stacks Procedure
-  playbook:
-    - stacks-render.yml
-    # - stacks-push.yml
-    - stacks-deploy.yml
-    - stacks-stop.yml
-    - stacks-start.yml
-    - stacks-remove.yml
   
+- import_playbook: playbooks/stacks-render.yml
+- import_playbook: playbooks/stacks-push.yml
+- import_playbook: playbooks/stacks-deploy.yml
+- import_playbook: playbooks/stacks-stop.yml
+- import_playbook: playbooks/stacks-start.yml
+- import_playbook: playbooks/stacks-remove.yml
