@@ -44,3 +44,4 @@ ansible-playbook playbooks/stack-networking-proxy.yml --ask-vault-pass`
 - [ ] Access control?
 - [ ] Stopping Stack
 - [ ] Render: Make sure logo and icons are present
+- [ ] Portainer backup and restore: https://app.swaggerhub.com/apis/portainer/portainer-ce/2.33.5#/backup/Backup

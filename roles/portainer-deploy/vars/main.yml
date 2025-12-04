@@ -1,7 +1,0 @@
----
-# Portainer Deploy Variables
-portainer:
-  url: "http://10.0.0.23:9000"
-  username: "root"
-  password: "Ackou1736jens"
-  endpoint_id: 4
