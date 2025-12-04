@@ -5,6 +5,17 @@
 networks:
   traefik-dev:
 
+configs: {}
+
+secrets: {}
+
+volumes:
+  traefik_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: 
+      o: bind
 
 services:
   # TRAEFIK - LOAD BALANCER / SSL / WEB SERVER
