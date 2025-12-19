@@ -1,0 +1,49 @@
+// .vscode/tasks.json
+
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Stacks: All",
+      "type": "shell",
+      "command": "ansible-playbook playbooks/create_stack.yml",
+      "problemMatcher": []
+    },
+    {
+      "label": "Stacks: Render",
+      "type": "shell",
+      "command": "ansible-playbook playbooks/stacks-render.yml",
+      "problemMatcher": []
+    },
+    {
+      "label": "Stacks: Push",
+      "type": "shell",
+      "command": "ansible-playbook playbooks/stacks-push.yml",
+      "problemMatcher": []
+    },
+    {
+      "label": "Stacks: Deploy",
+      "type": "shell",
+      "command": "ansible-playbook playbooks/stacks-deploy.yml",
+      "problemMatcher": []
+    },
+    {
+      "label": "Stacks: Stop",
+      "type": "shell",
+      "command": "ansible-playbook playbooks/stacks-stop.yml",
+      "problemMatcher": []
+    },
+    {
+      "label": "Stacks: Start",
+      "type": "shell",
+      "command": "ansible-playbook playbooks/stacks-start.yml",
+      "problemMatcher": []
+    },
+    {
+      "label": "Stacks: Remove",
+      "type": "shell",
+      "command": "ansible-playbook playbooks/stacks-remove.yml",
+      "problemMatcher": []
+    }
+  ]    
+}
