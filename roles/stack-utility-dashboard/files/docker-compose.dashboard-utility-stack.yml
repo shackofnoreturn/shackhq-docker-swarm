@@ -1,0 +1,29 @@
+---
+# Dashboard Utility Stack
+# Networking proxy stack including Traefik load balancer and Whoami for testing.
+
+networks:
+  traefik-dev:
+
+
+services:
+  dashy:
+    image: lissy93/dashy:latest
+    restart: always
+    networks:
+      - traefik-dev
+    ports:
+      - target: 8181
+        published: 8080
+        protocol: tcp
+        mode: host
+      - target: 80
+        published: 8081
+        protocol: tcp
+        mode: host
+    volumes:
+      # - "dashy_data_directory/conf.yml:/app/public/conf.yml:rw"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager

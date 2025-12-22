@@ -24,7 +24,7 @@ volumes:
 
 services:
   dashy:
-    image: lissy93/dashy:{{ traefik.version | default('latest') }}
+    image: lissy93/dashy:{{ dashy.version | default('latest') }}
     restart: always
 {#
     command:

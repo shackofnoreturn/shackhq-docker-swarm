@@ -1,9 +1,9 @@
 ---
-# roles/stack-networking-proxy/vars/main.yml
+# roles/stack-utility-dashboard/vars/main.yml
 
 stack:
-  name: proxy-networking-stack
-  full_name: "Proxy Networking Stack"
+  name: dashboard-utility-stack
+  full_name: "Dashboard Utility Stack"
   description: "Networking proxy stack including Traefik load balancer and Whoami for testing."
   # TODO: Move to global variables
   repo_url: "https://github.com/shackofnoreturn/shackhq-docker-swarm"
@@ -21,12 +21,12 @@ traefik:
   expose_externally: false
   https_only: false
   # TODO: built from global domain var
-  service_domain: traefik.dev.local
+  service_domain: dashy.dev.local
   auth: false
   dns_challenge_provider: false
 
-whoami:
-  version: "v1.11.0"
+dashy:
+  version: "latest"
 
 # TODO: Move to group_vars/all.yml
 authelia:
