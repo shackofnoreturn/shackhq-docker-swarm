@@ -43,13 +43,14 @@ services:
     networks:
       - {{ traefik.network | default('traefik-network') }}
     ports:
-      - target: "8080"
-        published: "8182"
+      - target: 8080
+        published: 8182
         protocol: tcp
         mode: host
-    # volumes:
-      # - "dashy_data_directory/conf.yml:/app/public/conf.yml:rw"
 {#
+    volumes:
+      - "dashy_data_directory/conf.yml:/app/public/conf.yml:rw"
+
       - "{{ volumes_root }}/traefik/traefik.yaml:/traefik.yaml"
       - "{{ volumes_root }}/traefik/basicAuth:/basicAuth"
       - "{{ volumes_root }}/traefik/conf.d/:/conf.d/"
