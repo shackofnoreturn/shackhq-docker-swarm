@@ -21,7 +21,7 @@ services:
         published: 8081
         protocol: tcp
         mode: host
-    volumes:
+    # volumes:
       # - "dashy_data_directory/conf.yml:/app/public/conf.yml:rw"
     deploy:
       placement:
