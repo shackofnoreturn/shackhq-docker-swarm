@@ -1,0 +1,14 @@
+---
+# /roles/dashboard-utility-stack/tasks/main.yml
+
+- name: Render docker compose for {{ stack.name }}
+  ansible.builtin.template:
+    src: docker-compose.{{ stack.name }}.yml.j2
+    dest: "{{ role_path }}/files/docker-compose.{{ stack.name }}.yml"
+    mode: "0644"
+
+# - name: Copy base config
+#   ansible.builtin.copy:
+#     src: conf.yml
+#     dest: "{{ dashy_data_directory }}/conf.yml"
+#     force: no
