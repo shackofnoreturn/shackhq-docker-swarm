@@ -14,7 +14,7 @@ services:
       - traefik-dev
     ports:
       - target: 80
-        published: 8181
+        published: 8182
         protocol: tcp
         mode: host
     # volumes:
