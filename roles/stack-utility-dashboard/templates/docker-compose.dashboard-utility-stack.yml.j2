@@ -43,12 +43,6 @@ services:
     networks:
       - {{ traefik.network | default('traefik-network') }}
     ports:
-{% if traefik.expose_internally %}
-      - target: 8181
-        published: 8080
-        protocol: tcp
-        mode: host
-{% endif %}
       - target: 80
         published: 8081
         protocol: tcp
