@@ -43,8 +43,8 @@ services:
     networks:
       - {{ traefik.network | default('traefik-network') }}
     ports:
-      - target: 8080
-        published: 8182
+      - target: "8080"
+        published: "8182"
         protocol: tcp
         mode: host
     # volumes:
@@ -61,6 +61,10 @@ services:
       placement:
         constraints:
           - node.role == manager
+      resources:
+        limits:
+          cpus: '1.00'
+          memory: 2G
 {#
 {% if traefik.expose_externally %}
       labels:
