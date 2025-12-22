@@ -43,7 +43,7 @@ services:
     networks:
       - {{ traefik.network | default('traefik-network') }}
     ports:
-      - target: 80
+      - target: 8080
         published: 8182
         protocol: tcp
         mode: host

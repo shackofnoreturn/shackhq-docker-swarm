@@ -13,7 +13,7 @@ services:
     networks:
       - traefik-dev
     ports:
-      - target: 80
+      - target: 8080
         published: 8182
         protocol: tcp
         mode: host
