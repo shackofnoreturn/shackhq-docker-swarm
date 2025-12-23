@@ -8,7 +8,7 @@ stack:
 
 traefik:
   version: "2.2"
-  network: traefik-dev
+  network: traefik-development
   expose_internally: true
   expose_externally: true
   https_only: true

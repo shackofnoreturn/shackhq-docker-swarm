@@ -3,7 +3,7 @@
 # Networking proxy stack including Traefik load balancer and Whoami for testing.
 
 networks:
-  traefik-dev:
+  traefik-development:
 
 
 secrets:
@@ -37,7 +37,7 @@ services:
     environment:
       CF_DNS_API_TOKEN: /run/secrets/cloudflare_api_token
     networks:
-      - traefik-dev
+      - traefik-development
     ports:
       - target: 8080
         published: 8181
@@ -62,7 +62,7 @@ services:
           - node.role == manager
       labels:
         - "traefik.enable=true"
-        - "traefik.docker.network=traefik-dev"
+        - "traefik.docker.network=traefik-development"
 
         - "traefik.http.routers.traefik.rule=Host(`traefik.shackofnoreturn.com`)"
         - "traefik.http.routers.traefik.entrypoints=websecure"
@@ -74,7 +74,7 @@ services:
   whoami:
     image: "traefik/whoami:v1.11.0"
     networks:
-      - traefik-dev
+      - traefik-development
     deploy:
       labels:
         - "traefik.enable=true"
