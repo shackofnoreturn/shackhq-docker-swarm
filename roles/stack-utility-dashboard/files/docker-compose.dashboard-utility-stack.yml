@@ -25,7 +25,7 @@ services:
           memory: 2G
 
   heimdall:
-    image: linuxserver/heimdall:latest
+    image: linuxserver/heimdall:latest 
     networks:
       - traefik-dev
     deploy:
