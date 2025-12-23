@@ -4,6 +4,7 @@
 
 networks:
   traefik-development:
+    external: true
 
 
 secrets:
