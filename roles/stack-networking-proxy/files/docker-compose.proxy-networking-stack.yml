@@ -12,11 +12,29 @@ services:
     container_name: traefik
     image: traefik:2.2
     restart: always
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.swarmmode=true"
+      # - "--providers.docker.endpoint=unix:///var/run/docker.sock"
+      - "--providers.docker.exposedbydefault=false"
+
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+
+      - "--certificatesresolvers.cloudflare.acme.email=shackofnoreturn@gmail.com"
+      - "--certificatesresolvers.cloudflare.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.cloudflare.acme.dnschallenge=true"
+      - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
+
+      - "--api.dashboard=true"
+      - "--log.level=DEBUG"
+    environment:
+      CF_DNS_API_TOKEN: /run/secrets/cloudflare_api_token
     networks:
       - traefik-dev
     ports:
-      - target: 8181
-        published: 8080
+      - target: 8080
+        published: 8181
         protocol: tcp
         mode: host
       - target: 80
@@ -27,14 +45,35 @@ services:
         published: 443
         protocol: tcp
         mode: host
+    secrets:
+      - cloudflare_api_token
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "traefik_data:/letsencrypt"
+      # - "/var/run/docker.sock:/var/run/docker.sock:ro"
     deploy:
       placement:
         constraints:
           - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=traefik-dev"
+
+        - "traefik.http.routers.traefik.rule=Host(`traefik.shackofnoreturn.com`)"
+        - "traefik.http.routers.traefik.entrypoints=websecure"
+        - "traefik.http.routers.traefik.tls=true"
+        - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
+        - "traefik.http.routers.traefik.service=api@internal"
+
 
   whoami:
     image: "traefik/whoami:v1.11.0"
     networks:
       - traefik-dev
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.whoami.rule=Host(`whoami.shackofnoreturn.com`)"
+        - "traefik.http.routers.whoami.entrypoints=websecure"
+        - "traefik.http.routers.whoami.tls=true"
+        - "traefik.http.routers.whoami.tls.certresolver=cloudflare"
+        - "traefik.http.services.whoami.loadbalancer.server.port=80"
