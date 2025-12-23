@@ -16,15 +16,9 @@ secrets:
   cloudflare_api_token:
     external: true
 
-{#
 volumes:
   traefik_data:
     driver: local
-    driver_opts:
-      type: none
-      device: 
-      o: bind
-#}
 
 services:
   # TRAEFIK - LOAD BALANCER / SSL / WEB SERVER
