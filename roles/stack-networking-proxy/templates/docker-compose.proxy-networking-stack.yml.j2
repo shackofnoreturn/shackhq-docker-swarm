@@ -6,7 +6,8 @@ name: {{ stack.name }}
 #}
 
 networks:
-  {{ traefik.network | default('traefik-network') }}:
+  {{ traefik.network }}:
+    external: true
 
 {#
 configs: {}
