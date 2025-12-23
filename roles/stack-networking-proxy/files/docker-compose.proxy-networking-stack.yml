@@ -54,8 +54,8 @@ services:
     secrets:
       - cloudflare_api_token
     volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "traefik_data:/letsencrypt"
-      # - "/var/run/docker.sock:/var/run/docker.sock:ro"
     deploy:
       placement:
         constraints:
