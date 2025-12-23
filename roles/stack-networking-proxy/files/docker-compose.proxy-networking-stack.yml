@@ -6,6 +6,11 @@ networks:
   traefik-dev:
 
 
+secrets:
+  cloudflare_api_token:
+    external: true
+
+
 services:
   # TRAEFIK - LOAD BALANCER / SSL / WEB SERVER
   traefik:

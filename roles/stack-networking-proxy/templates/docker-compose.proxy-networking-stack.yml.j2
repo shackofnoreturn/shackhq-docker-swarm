@@ -10,9 +10,13 @@ networks:
 
 {#
 configs: {}
+#}
 
-secrets: {}
+secrets:
+  cloudflare_api_token:
+    external: true
 
+{#
 volumes:
   traefik_data:
     driver: local
