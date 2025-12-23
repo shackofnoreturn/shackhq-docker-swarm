@@ -25,7 +25,7 @@ services:
           memory: 2G
 
   heimdall:
-    image: linuxserver/heimdall:latest 
+    image: linuxserver/heimdall:latest
     networks:
       - traefik-dev
     deploy:
@@ -33,38 +33,38 @@ services:
         constraints:
           - node.role == manager
 
-  # homedash:
-  #   image: linuxserver/homedish:latest
-  #   networks:
-  #     - traefik-dev
-  #   deploy:
-  #     placement:
-  #       constraints:
-  #         - node.role == manager
+  homedash:
+    image: linuxserver/homedish:latest
+    networks:
+      - traefik-dev
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
 
-  # homepage:
-  #   image: b4bz/hompage:latest
-  #   networks:
-  #     - traefik-dev
-  #   deploy:
-  #     placement:
-  #       constraints:
-  #         - node.role == manager
+  homepage:
+    image: b4bz/hompage:latest
+    networks:
+      - traefik-dev
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
 
-  # organizr:
-  #   image: organizr/organizr:latest
-  #   networks:
-  #     - traefik-dev
-  #   deploy:
-  #     placement:
-  #       constraints:
-  #         - node.role == manager
+  organizr:
+    image: organizr/organizr:latest
+    networks:
+      - traefik-dev
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
 
-  # sui:
-  #   image: ghcr.io/linuxserver/sui:latest
-  #   networks:
-  #     - traefik-dev
-  #   deploy:
-  #     placement:
-  #       constraints:
-  #         - node.role == manager
+  sui:
+    image: ghcr.io/linuxserver/sui:latest
+    networks:
+      - traefik-dev
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
