@@ -9,9 +9,7 @@ networks:
 services:
   # TRAEFIK - LOAD BALANCER / SSL / WEB SERVER
   traefik:
-    container_name: traefik
     image: traefik:2.2
-    restart: always
     command:
       - "--providers.docker=true"
       - "--providers.docker.swarmmode=true"

@@ -25,9 +25,7 @@ volumes:
 services:
   # TRAEFIK - LOAD BALANCER / SSL / WEB SERVER
   traefik:
-    container_name: traefik
     image: traefik:{{ traefik.version | default('latest') }}
-    restart: always
     command:
       - "--providers.docker=true"
       - "--providers.docker.swarmmode=true"
