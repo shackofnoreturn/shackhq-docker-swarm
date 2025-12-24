@@ -37,7 +37,8 @@ services:
       - "--api.dashboard=true"
       - "--log.level=DEBUG"
     environment:
-      DNS_API_TOKEN: /run/secrets/cloudflare_api_token
+      - CF_API_EMAIL=ackoujens@gmail.com
+      - CF_DNS_API_TOKEN=/run/secrets/cloudflare_api_token
     networks:
       - traefik-development
     ports:
