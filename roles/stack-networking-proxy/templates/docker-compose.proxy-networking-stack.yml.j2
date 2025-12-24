@@ -28,6 +28,7 @@ services:
     command:
       - "--providers.docker=true"
       - "--providers.docker.swarmmode=true"
+      - "--providers.docker.watch=true"
       # - "--providers.docker.endpoint=unix:///var/run/docker.sock"
       - "--providers.docker.exposedbydefault=false"
 
@@ -46,12 +47,6 @@ services:
     networks:
       - {{ traefik.network | default('traefik-network') }}
     ports:
-{% if traefik.expose_internally %}
-      - target: 8080
-        published: 8181
-        protocol: tcp
-        mode: host
-{% endif %}
       - target: 80
         published: 80
         protocol: tcp
@@ -60,25 +55,11 @@ services:
         published: 443
         protocol: tcp
         mode: host
-{#
-      - target: 2222
-        published: 2222
-        protocol: tcp
-        mode: host
-#}
     secrets:
       - cloudflare_api_token
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "traefik_data:/letsencrypt"
-{#
-      - "{{ volumes_root }}/traefik/traefik.yaml:/traefik.yaml"
-      - "{{ volumes_root }}/traefik/basicAuth:/basicAuth"
-      - "{{ volumes_root }}/traefik/conf.d/:/conf.d/"
-      - "{{ volumes_root }}/traefik/acme.json:/acme.json"
-      # ALT
-      - "traefik_data:/letsencrypt"
-#}
     deploy:
       placement:
         constraints:
@@ -101,6 +82,7 @@ services:
     deploy:
       labels:
         - "traefik.enable=true"
+        - "traefik.docker.network={{ traefik.network }}"
         - "traefik.http.routers.whoami.rule=Host(`whoami.{{ domain.base }}`)"
         - "traefik.http.routers.whoami.entrypoints=websecure"
         - "traefik.http.routers.whoami.tls=true"
