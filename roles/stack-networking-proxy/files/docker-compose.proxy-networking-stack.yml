@@ -50,6 +50,10 @@ services:
         published: 443
         protocol: tcp
         mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
     secrets:
       - cloudflare_api_token
     volumes:
@@ -68,6 +72,7 @@ services:
         - "traefik.http.routers.traefik.tls=true"
         - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
         - "traefik.http.routers.traefik.service=api@internal"
+        - "traefik.http.services.justAdummyService.loadbalancer.server.port=1337"
 
 
   whoami:

@@ -73,12 +73,12 @@ services:
         - "traefik.enable=true"
         - "traefik.docker.network={{ traefik.network }}"
 
-        - "traefik.http.routers.traefik.rule=Host(`{{ traefik.domain.base }}`)"
+        - "traefik.http.routers.traefik.rule=Host(`traefik.{{ domain.base }}`)"
         - "traefik.http.routers.traefik.entrypoints=websecure"
         - "traefik.http.routers.traefik.tls=true"
         - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
         - "traefik.http.routers.traefik.service=api@internal"
-        # - "traefik.http.services.justAdummyService.loadbalancer.server.port=1337"
+        - "traefik.http.services.justAdummyService.loadbalancer.server.port=1337"
 
 
   whoami:
