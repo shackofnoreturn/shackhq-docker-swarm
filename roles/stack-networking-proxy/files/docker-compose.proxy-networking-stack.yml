@@ -37,7 +37,7 @@ services:
       - "--api.dashboard=true"
       - "--log.level=DEBUG"
     environment:
-      CF_DNS_API_TOKEN: /run/secrets/cloudflare_api_token
+      DNS_API_TOKEN: /run/secrets/cloudflare_api_token
     networks:
       - traefik-development
     ports:
