@@ -18,7 +18,7 @@ volumes:
 services:
   # TRAEFIK - LOAD BALANCER / SSL / WEB SERVER
   traefik:
-    image: traefik:2.10
+    image: traefik:2.11.33
     command:
       - "--providers.docker=true"
       - "--providers.docker.swarmmode=true"
