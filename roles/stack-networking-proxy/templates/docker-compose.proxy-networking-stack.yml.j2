@@ -53,8 +53,8 @@ services:
       - "--entrypoints.web.address=:80"
 
       # Configure HTTP to HTTPS Redirection
-      # - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      # - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
 
       # HTTPS EntryPoint
       - "--entrypoints.websecure.address=:443"
@@ -114,7 +114,7 @@ services:
         
         # Dashboard router
         - "traefik.http.routers.dashboard.rule=Host(`dev-traefik.shackofnoreturn.com`)"
-        - "traefik.http.routers.dashboard.entrypoints=web,websecure"
+        - "traefik.http.routers.dashboard.entrypoints=websecure"
         - "traefik.http.routers.dashboard.service=api@internal"
         - "traefik.http.routers.dashboard.tls=true"
 
@@ -137,7 +137,7 @@ services:
         # Define the WHoami router rule
         - "traefik.http.routers.whoami.rule=Host(`dev-whoami.shackofnoreturn.com`)"
         # Expose Whoami on the HTTPS entrypoint
-        - "traefik.http.routers.whoami.entrypoints=web,websecure"
+        - "traefik.http.routers.whoami.entrypoints=websecure"
         # Enable TLS
         - "traefik.http.routers.whoami.tls=true"
         # Expose the whoami port number to Traefik
