@@ -26,6 +26,9 @@ services:
   traefik:
     image: traefik:{{ traefik.version | default('latest') }}
     command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+
       - "--providers.docker=true"
       - "--providers.docker.swarmmode=true"
       - "--providers.docker.watch=true"
@@ -35,19 +38,18 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
 
-      - "--certificatesresolvers.cloudflare.acme.email={{ traefik.acme.email }}"
-      - "--certificatesresolvers.cloudflare.acme.storage={{ traefik.acme.storage }}"
-      # - "--certificatesresolvers.cloudflare.acme.caServer: https://acme-v02.api.letsencrypt.org/directory" # production (default)
-      - "--certificatesresolvers.cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory" # staging
       - "--certificatesresolvers.cloudflare.acme.dnschallenge=true"
       - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider={{ traefik.acme.resolver }}"
       - "--certificatesresolvers.cloudflare.acme.dnschallenge.delaybeforecheck=10"
 
-      - "--api.dashboard=true"
-      - "--log.level=DEBUG"
+      # - "--certificatesresolvers.cloudflare.acme.caServer: https://acme-v02.api.letsencrypt.org/directory" # production (default)
+      - "--certificatesresolvers.cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory" # staging
+
+      - "--certificatesresolvers.cloudflare.acme.email={{ traefik.acme.email }}"
+      - "--certificatesresolvers.cloudflare.acme.storage={{ traefik.acme.storage }}"
     environment:
-      - CLOUDFLARE_API_EMAIL=ackoujens@gmail.com
-      - CLOUDFLARE_DNS_API_TOKEN=/run/secrets/cloudflare_api_token
+      - CF_API_EMAIL=ackoujens@gmail.com
+      - CF_API_KEY=/run/secrets/cloudflare_api_token
     networks:
       - {{ traefik.network | default('traefik-network') }}
     ports:
