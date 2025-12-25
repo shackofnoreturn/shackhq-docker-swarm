@@ -49,6 +49,10 @@ services:
 
     # Traefik Static configuration via command-line arguments
     command:
+      # API & Dashboard
+      - "--api.dashboard=true" # Enable the dashboard
+      - "--api.debug=true"     # Enable debug mode for the API
+
       # HTTP EntryPoint
       - "--entrypoints.web.address=:80"
 
@@ -62,9 +66,12 @@ services:
       - "--entrypoints.websecure.http.tls.certresolver=cloudflare"
 
       # ACME Configuration
-      - "--certificatesresolvers.cloudflare.acme.dnschallenge=true"
-      - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
-      - "--certificatesresolvers.cloudflare.acme.dnschallenge.resolvers='1.1.1.1:53,1.0.0.1:53'"
+      # - "--certificatesresolvers.cloudflare.acme.dnschallenge=true"
+      # - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
+      # - "--certificatesresolvers.cloudflare.acme.dnschallenge.resolvers='1.1.1.1:53,1.0.0.1:53'"
+
+      - "--certificatesresolvers.cloudflare.acme.httpchallenge=true"
+      - "--certificatesresolvers.cloudflare.acme.httpchallenge.entrypoint=web"
 
       - "--certificatesresolvers.cloudflare.acme.caserver=https://acme-v02.api.letsencrypt.org/directory" # production (default)
       # - "--certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory" # staging
@@ -88,9 +95,6 @@ services:
       # Specify the default network for Traefik to connect to services
       - "--providers.swarm.network={{ traefik.network }}"
 
-      # API & Dashboard
-      - "--api.dashboard=true" # Enable the dashboard
-      - "--api.insecure=true" # Explicitly disable insecure API mod
 
       # Observability
       - "--log.level=DEBUG" # Set the Log Level e.g INFO, DEBUG
@@ -112,6 +116,7 @@ services:
           - node.role == manager
       labels:
         - "traefik.enable=true"
+        - "traefik.docker.network={{ traefik.network }}"
         
         # Dashboard router
         - "traefik.http.routers.dashboard.rule=Host(`dev-traefik.shackofnoreturn.com`)"
@@ -135,6 +140,8 @@ services:
       labels:
         # Enable Service discovery for Traefik
         - "traefik.enable=true"
+        - "traefik.docker.network={{ traefik.network }}"
+
         # Define the WHoami router rule
         - "traefik.http.routers.whoami.rule=Host(`dev-whoami.shackofnoreturn.com`)"
         # Expose Whoami on the HTTPS entrypoint
