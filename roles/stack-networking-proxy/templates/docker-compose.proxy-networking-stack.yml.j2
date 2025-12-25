@@ -16,6 +16,8 @@ configs: {}
 secrets:
   cloudflare_api_token:
     external: true
+  cloudflare_tunnel_token:
+    external: true
 
 volumes:
   traefik_data:
@@ -23,6 +25,14 @@ volumes:
 
 services:
   # TRAEFIK - LOAD BALANCER / SSL / WEB SERVER
+  cloudflaretunnel:
+    image: cloudflare/cloudflared:2023.2.1
+    environment:
+      - TUNNEL_TOKEN=/run/secrets/cloudflare_tunnel_token
+    command: tunnel --no-autoupdate run
+    networks:
+      - {{ traefik.network | default('traefik-network') }}
+
   traefik:
     image: traefik:{{ traefik.version | default('latest') }}
     command:
