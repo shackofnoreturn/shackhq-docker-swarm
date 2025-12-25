@@ -10,8 +10,6 @@ networks:
 secrets:
   cloudflare_api_token:
     external: true
-  cloudflare_tunnel_token:
-    external: true
 
 volumes:
   traefik_data:
@@ -19,18 +17,6 @@ volumes:
 
 services:
   # TRAEFIK - LOAD BALANCER / SSL / WEB SERVER
-  cloudflaretunnel:
-    image: cloudflare/cloudflared:2025.4.0
-    command: tunnel run
-    environment:
-      TUNNEL_TOKEN_FILE: /run/secrets/cloudflare_tunnel_token
-    secrets:
-      - cloudflare_tunnel_token    
-    networks:
-      - traefik-development
-    deploy:
-      mode: global
-
   traefik:
     image: traefik:2.10
     command:
@@ -55,7 +41,7 @@ services:
       - "--log.level=DEBUG"
     environment:
       - CF_API_EMAIL=ackoujens@gmail.com
-      - CF_DNS_API_TOKEN=/run/secrets/cloudflare_api_token
+      - CF_DNS_API_TOKEN_FILE=/run/secrets/cloudflare_api_token
     networks:
       - traefik-development
     ports:
