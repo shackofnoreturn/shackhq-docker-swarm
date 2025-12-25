@@ -52,7 +52,6 @@ services:
       # Configure HTTP to HTTPS Redirection
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
 
       # HTTPS EntryPoint
       - "--entrypoints.websecure.address=:443"
@@ -63,7 +62,7 @@ services:
       - "--certificatesresolvers.cloudflare.acme.dnschallenge=true"
       - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
 
-      - "--certificatesresolvers.cloudflare.acme.caServer=https://acme-v02.api.letsencrypt.org/directory" # production (default)
+      - "--certificatesresolvers.cloudflare.acme.caserver=https://acme-v02.api.letsencrypt.org/directory" # production (default)
       # - "--certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory" # staging
       - "--certificatesresolvers.cloudflare.acme.email=ackoujens@gmail.com"
       - "--certificatesresolvers.cloudflare.acme.storage=/certs/acme.json"      
@@ -111,7 +110,7 @@ services:
         - "traefik.enable=true"
         
         # Dashboard router
-        - "traefik.http.routers.dashboard.rule=Host(`dashboard.shackofnoreturn.com`)"
+        - "traefik.http.routers.dashboard.rule=Host(`dev-traefik.shackofnoreturn.com`)"
         - "traefik.http.routers.dashboard.entrypoints=websecure"
         - "traefik.http.routers.dashboard.service=api@internal"
         - "traefik.http.routers.dashboard.tls=true"
@@ -133,7 +132,7 @@ services:
         # Enable Service discovery for Traefik
         - "traefik.enable=true"
         # Define the WHoami router rule
-        - "traefik.http.routers.whoami.rule=Host(`whoami.shackofnoreturn.com`)"
+        - "traefik.http.routers.whoami.rule=Host(`dev-whoami.shackofnoreturn.com`)"
         # Expose Whoami on the HTTPS entrypoint
         - "traefik.http.routers.whoami.entrypoints=websecure"
         # Enable TLS
