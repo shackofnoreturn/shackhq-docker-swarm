@@ -113,7 +113,6 @@ services:
           - node.role == manager
       labels:
         - "traefik.enable=true"
-        - "traefik.swarm.network=traefik-development"
         
         # Dashboard router
         - "traefik.http.routers.dashboard.rule=Host(`dev-traefik.shackofnoreturn.com`)"
@@ -137,7 +136,6 @@ services:
       labels:
         # Enable Service discovery for Traefik
         - "traefik.enable=true"
-        - "traefik.swarm.network=traefik-development"
 
         # Define the WHoami router rule
         - "traefik.http.routers.whoami.rule=Host(`dev-whoami.shackofnoreturn.com`)"
