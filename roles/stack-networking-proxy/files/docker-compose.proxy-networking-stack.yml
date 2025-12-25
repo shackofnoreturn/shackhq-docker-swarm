@@ -58,12 +58,12 @@ services:
       - "--entrypoints.websecure.http.tls=true"
 
       # ACME Configuration
-      - "--certificateresolvers.cloudflare.acme.email=ackoujens@gmail.com"
-      - "--certificateresolvers.cloudflare.acme.storage=/certs/acme.json"
-      # - "--certificateresolvers.cloudflare.acme.caServer: https://acme-v02.api.letsencrypt.org/directory" # production (default)
-      - "--certificateresolvers.cloudflare.acme.caServer: https://acme-staging-v02.api.letsencrypt.org/directory" # staging
-      - "--certificateresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
-      - "--certificateresolvers.cloudflare.acme.dnschallenge.delaybeforecheck=10"
+      - "--certificatesresolvers.cloudflare.acme.email=ackoujens@gmail.com"
+      - "--certificatesresolvers.cloudflare.acme.storage=/certs/acme.json"
+      # - "--certificatesresolvers.cloudflare.acme.caServer: https://acme-v02.api.letsencrypt.org/directory" # production (default)
+      - "--certificatesresolvers.cloudflare.acme.caServer: https://acme-staging-v02.api.letsencrypt.org/directory" # staging
+      - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.cloudflare.acme.dnschallenge.delaybeforecheck=10"
 
       # Attach dynamic TLS file
       # - "--providers.file.filename=/dynamic/tls.yaml"
