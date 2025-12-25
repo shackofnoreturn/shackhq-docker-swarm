@@ -63,8 +63,8 @@ services:
       # ACME Configuration
       - "--certificatesresolvers.cloudflare.acme.email=ackoujens@gmail.com"
       - "--certificatesresolvers.cloudflare.acme.storage=/certs/acme.json"
-      # - "--certificatesresolvers.cloudflare.acme.caServer: https://acme-v02.api.letsencrypt.org/directory" # production (default)
-      - "--certificatesresolvers.cloudflare.acme.caServer: https://acme-staging-v02.api.letsencrypt.org/directory" # staging
+      # - "--certificatesresolvers.cloudflare.acme.caServer=https://acme-v02.api.letsencrypt.org/directory" # production (default)
+      - "--certificatesresolvers.cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory" # staging
       - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
       - "--certificatesresolvers.cloudflare.acme.dnschallenge.delaybeforecheck=10"
 
