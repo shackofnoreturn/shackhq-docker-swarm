@@ -28,7 +28,7 @@ services:
   cloudflaretunnel:
     image: cloudflare/cloudflared:2023.2.1
     environment:
-      - TUNNEL_TOKEN=/run/secrets/cloudflare_tunnel_token
+      - TUNNEL_TOKEN_FILE=/run/secrets/cloudflare_tunnel_token
     command: tunnel --no-autoupdate run
     networks:
       - {{ traefik.network | default('traefik-network') }}
