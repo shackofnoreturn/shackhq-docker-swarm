@@ -83,7 +83,7 @@ services:
       # Observability
       - "--log.level=INFO" # Set the Log Level e.g INFO, DEBUG
       - "--accesslog=true" # Enable Access Logs
-      - "--metrics.prometheus=true"  # Enable Prometheus
+      # - "--metrics.prometheus=true"  # Enable Prometheus
 
     # environment:
     #   - CF_API_EMAIL=ackoujens@gmail.com
@@ -102,7 +102,7 @@ services:
         - "traefik.enable=true"
         
         # Dashboard router
-        - "traefik.http.routers.dashboard.rule=Host(`dashboard.swarm.localhost`)"
+        - "traefik.http.routers.dashboard.rule=Host(`dashboard.localhost`)"
         - "traefik.http.routers.dashboard.entrypoints=websecure"
         - "traefik.http.routers.dashboard.service=api@internal"
         - "traefik.http.routers.dashboard.tls=true"
@@ -124,7 +124,7 @@ services:
         # Enable Service discovery for Traefik
         - "traefik.enable=true"
         # Define the WHoami router rule
-        - "traefik.http.routers.whoami.rule=Host(`whoami.swarm.localhost`)"
+        - "traefik.http.routers.whoami.rule=Host(`whoami.localhost`)"
         # Expose Whoami on the HTTPS entrypoint
         - "traefik.http.routers.whoami.entrypoints=websecure"
         # Enable TLS
