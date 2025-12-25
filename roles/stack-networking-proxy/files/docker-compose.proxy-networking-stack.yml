@@ -12,9 +12,9 @@ networks:
 #   cloudflare_api_token:
 #     external: true
 
-volumes:
-  certs:
-  dynamic:
+# volumes:
+#   certs:
+#   dynamic:
 
 services:
   # TRAEFIK - LOAD BALANCER / SSL / WEB SERVER
@@ -42,8 +42,8 @@ services:
     # Mount the Docker socket for the Swarm provider
     # This MUST be ran from a manager node to access the Swarm API via the socket
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - certs:/certs:ro
-      - dynamic:/dynamic:ro
+      # - certs:/certs:ro
+      # - dynamic:/dynamic:ro
 
     # Traefik Static configuration via command-line arguments
     command:
