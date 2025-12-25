@@ -61,6 +61,8 @@ services:
       # ACME Configuration
       - "--certificatesresolvers.cloudflare.acme.dnschallenge=true"
       - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.cloudflare.acme.dnschallenge.resolver[0]=1.1.1.1:53"
+      - "--certificatesresolvers.cloudflare.acme.dnschallenge.resolver[1]=1.0.0.1:53"
 
       - "--certificatesresolvers.cloudflare.acme.caserver=https://acme-v02.api.letsencrypt.org/directory" # production (default)
       # - "--certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory" # staging
