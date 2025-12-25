@@ -20,10 +20,10 @@ volumes:
 services:
   # TRAEFIK - LOAD BALANCER / SSL / WEB SERVER
   cloudflaretunnel:
-    image: cloudflare/cloudflared:2023.2.1
+    image: cloudflare/cloudflared:latest
     environment:
       - TUNNEL_TOKEN_FILE=/run/secrets/cloudflare_tunnel_token
-    command: tunnel --no-autoupdate run
+    command: tunnel run
     networks:
       - traefik-development
 
