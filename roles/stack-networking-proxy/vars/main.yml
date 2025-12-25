@@ -7,7 +7,7 @@ stack:
   description: "Networking proxy stack including Traefik load balancer and Whoami for testing."
 
 traefik:
-  version: "2.11.33"
+  version: "3.4"
   network: traefik-development
   expose_internally: true
   expose_externally: true
