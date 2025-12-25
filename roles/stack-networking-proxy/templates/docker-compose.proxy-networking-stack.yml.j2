@@ -37,7 +37,7 @@ services:
 
       - "--certificatesresolvers.cloudflare.acme.email={{ traefik.acme.email }}"
       - "--certificatesresolvers.cloudflare.acme.storage={{ traefik.acme.storage }}"
-      - "--certificatesresolvers.cloudflare.acme.caServer: https://acme-v02.api.letsencrypt.org/directory" # production (default)
+      # - "--certificatesresolvers.cloudflare.acme.caServer: https://acme-v02.api.letsencrypt.org/directory" # production (default)
       # - "--certificatesresolvers.cloudflare.acme.caServer: https://acme-staging-v02.api.letsencrypt.org/directory" # staging
       # dnsChallenge:
       - "--certificatesresolvers.cloudflare.acme.dnschallenge=true"
