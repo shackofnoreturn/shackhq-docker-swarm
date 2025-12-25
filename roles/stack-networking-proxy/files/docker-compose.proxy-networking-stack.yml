@@ -40,8 +40,8 @@ services:
       - "--api.dashboard=true"
       - "--log.level=DEBUG"
     environment:
-      - CF_API_EMAIL=ackoujens@gmail.com
-      - CF_DNS_API_TOKEN_FILE=/run/secrets/cloudflare_api_token
+      - "CF_API_EMAIL=ackoujens@gmail.com"
+      - "CF_DNS_API_TOKEN=/run/secrets/cloudflare_api_token"
     networks:
       - traefik-development
     ports:
@@ -70,6 +70,8 @@ services:
         - "traefik.http.routers.traefik.entrypoints=websecure"
         - "traefik.http.routers.traefik.tls=true"
         - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
+        - "traefik.http.routers.traefik.tls.domains[0].main=shackofnoreturn.com"
+        - "traefik.http.routers.traefik.tls.domains[0].sans=*.shackofnoreturn.com"
         - "traefik.http.routers.traefik.service=api@internal"
         - "traefik.http.services.traefik.loadbalancer.server.port=8080"
 
