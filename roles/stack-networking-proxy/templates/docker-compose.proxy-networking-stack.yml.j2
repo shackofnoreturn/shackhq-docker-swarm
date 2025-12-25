@@ -116,7 +116,7 @@ services:
           - node.role == manager
       labels:
         - "traefik.enable=true"
-        - "traefik.docker.network={{ traefik.network }}"
+        - "traefik.swarm.network={{ traefik.network }}"
         
         # Dashboard router
         - "traefik.http.routers.dashboard.rule=Host(`dev-traefik.shackofnoreturn.com`)"
@@ -140,7 +140,7 @@ services:
       labels:
         # Enable Service discovery for Traefik
         - "traefik.enable=true"
-        - "traefik.docker.network={{ traefik.network }}"
+        - "traefik.swarm.network={{ traefik.network }}"
 
         # Define the WHoami router rule
         - "traefik.http.routers.whoami.rule=Host(`dev-whoami.shackofnoreturn.com`)"
