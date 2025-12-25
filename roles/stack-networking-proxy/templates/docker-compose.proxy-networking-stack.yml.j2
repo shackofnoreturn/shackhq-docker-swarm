@@ -60,8 +60,6 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls=true"
       - "--entrypoints.websecure.http.tls.certresolver=cloudflare"
-      - "--entrypoints.websecure.http.tls.domains[0].main=shackofnoreturn.com"
-      - "--entrypoints.websecure.http.tls.domains[0].sans=*.shackofnoreturn.com"
 
       # ACME Configuration
       - "--certificatesresolvers.cloudflare.acme.dnschallenge=true"
