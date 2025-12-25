@@ -27,7 +27,7 @@ services:
 
     networks:
     # Connect to the overlay network for inter-container communication across nodes
-      - {{ traefik.network | default('traefik-network') }}
+      - {{ traefik.network}}
 
     ports:
     # Expose Traefik's entry points to the Swarm
@@ -78,7 +78,7 @@ services:
       - "--providers.swarm.exposedbydefault=false"
 
       # Specify the default network for Traefik to connect to services
-      - "--providers.swarm.network=traefik_traefik_proxy"
+      - "--providers.swarm.network={{ traefik.network }}"
 
       # API & Dashboard
       - "--api.dashboard=true" # Enable the dashboard
