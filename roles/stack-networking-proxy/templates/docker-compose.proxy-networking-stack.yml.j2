@@ -66,8 +66,8 @@ services:
       - "--certificatesresolvers.cloudflare.acme.dnschallenge=true"
       - "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
 
-      # - "--certificatesresolvers.cloudflare.acme.caServer=https://acme-v02.api.letsencrypt.org/directory" # production (default)
-      - "--certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory" # staging
+      - "--certificatesresolvers.cloudflare.acme.caServer=https://acme-v02.api.letsencrypt.org/directory" # production (default)
+      # - "--certificatesresolvers.cloudflare.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory" # staging
       - "--certificatesresolvers.cloudflare.acme.email=ackoujens@gmail.com"
       - "--certificatesresolvers.cloudflare.acme.storage=/certs/acme.json"      
 
@@ -101,9 +101,9 @@ services:
       - CF_API_EMAIL=ackoujens@gmail.com
       - CF_DNS_API_TOKEN=/run/secrets/cloudflare_api_token
     
-    # secrets:
-    #   - cloudflare_api_token
-    
+    secrets:
+      - cloudflare_api_token
+
     deploy:
       mode: replicated
       replicas: 1
