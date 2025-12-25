@@ -115,7 +115,6 @@ services:
         - "traefik.http.routers.dashboard.entrypoints=websecure"
         - "traefik.http.routers.dashboard.service=api@internal"
         - "traefik.http.routers.dashboard.tls=true"
-        - "traefik.http.routers.dashboard.tls.domains[0].main=dev-traefik.shackofnoreturn.com"
 
         # Basic‑auth middleware
         # - "traefik.http.middlewares.dashboard-auth.basicauth.users=<PASTE_HASH_HERE>"
