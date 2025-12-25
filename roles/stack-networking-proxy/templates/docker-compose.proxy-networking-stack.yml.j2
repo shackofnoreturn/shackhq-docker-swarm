@@ -47,7 +47,7 @@ services:
       - "--log.level=DEBUG"
     environment:
       - CF_API_EMAIL=ackoujens@gmail.com
-      - CF_DNS_API_TOKEN_FILE=/run/secrets/cloudflare_api_token
+      - CF_DNS_API_TOKEN=/run/secrets/cloudflare_api_token
     networks:
       - {{ traefik.network | default('traefik-network') }}
     ports:
