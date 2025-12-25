@@ -4,8 +4,7 @@
 
 networks:
   traefik-development:
-    driver: overlay
-    attachable: true
+    external: true
 
 # configs: {}
 
