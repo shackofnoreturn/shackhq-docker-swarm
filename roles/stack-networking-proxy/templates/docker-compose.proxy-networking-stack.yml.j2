@@ -53,8 +53,8 @@ services:
       - "--entrypoints.web.address=:80"
 
       # Configure HTTP to HTTPS Redirection
-      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      # - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      # - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
 
       # HTTPS EntryPoint
       - "--entrypoints.websecure.address=:443"
