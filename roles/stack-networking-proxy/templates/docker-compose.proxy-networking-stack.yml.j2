@@ -11,13 +11,12 @@ networks:
 
 # configs: {}
 
-# secrets:
-#   cloudflare_api_token:
-#     external: true
+secrets:
+  cloudflare_api_token:
+    external: true
 
-# volumes:
-#   certs:
-#   dynamic:
+volumes:
+  traefik:
 
 services:
   # TRAEFIK - LOAD BALANCER / SSL / WEB SERVER
@@ -45,8 +44,7 @@ services:
     # Mount the Docker socket for the Swarm provider
     # This MUST be ran from a manager node to access the Swarm API via the socket
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      # - certs:/certs:ro
-      # - dynamic:/dynamic:ro
+      - traefik:/certs
 
     # Traefik Static configuration via command-line arguments
     command:
@@ -61,6 +59,14 @@ services:
       # HTTPS EntryPoint
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls=true"
+
+      # ACME Configuration
+      - "--certificateresolvers.cloudflare.acme.email=ackoujens@gmail.com"
+      - "--certificateresolvers.cloudflare.acme.storage=/certs/acme.json
+      # - "--certificateresolvers.cloudflare.acme.caServer: https://acme-v02.api.letsencrypt.org/directory # production (default)
+      - "--certificateresolvers.cloudflare.acme.caServer: https://acme-staging-v02.api.letsencrypt.org/directory # staging
+      - "--certificateresolvers.cloudflare.acme.dnschallenge.provider=cloudflare"
+      - "--certificateresolvers.cloudflare.acme.dnschallenge.delaybeforecheck=10
 
       # Attach dynamic TLS file
       # - "--providers.file.filename=/dynamic/tls.yaml"
@@ -81,7 +87,7 @@ services:
 
       # API & Dashboard
       - "--api.dashboard=true" # Enable the dashboard
-      - "--api.insecure=false" # Explicitly disable insecure API mod
+      - "--api.insecure=true" # Explicitly disable insecure API mod
 
       # Observability
       - "--log.level=DEBUG" # Set the Log Level e.g INFO, DEBUG
@@ -89,8 +95,8 @@ services:
       # - "--metrics.prometheus=true"  # Enable Prometheus
 
     # environment:
-    #   - CF_API_EMAIL=ackoujens@gmail.com
-    #   - CF_DNS_API_TOKEN=/run/secrets/cloudflare_api_token
+      - CF_API_EMAIL=ackoujens@gmail.com
+      - CF_DNS_API_TOKEN=/run/secrets/cloudflare_api_token
     
     # secrets:
     #   - cloudflare_api_token
@@ -105,7 +111,7 @@ services:
         - "traefik.enable=true"
         
         # Dashboard router
-        - "traefik.http.routers.dashboard.rule=Host(`dashboard.dev.localhost`)"
+        - "traefik.http.routers.dashboard.rule=Host(`dashboard.shackofnoreturn.com`)"
         - "traefik.http.routers.dashboard.entrypoints=websecure"
         - "traefik.http.routers.dashboard.service=api@internal"
         - "traefik.http.routers.dashboard.tls=true"
@@ -127,7 +133,7 @@ services:
         # Enable Service discovery for Traefik
         - "traefik.enable=true"
         # Define the WHoami router rule
-        - "traefik.http.routers.whoami.rule=Host(`whoami.dev.localhost`)"
+        - "traefik.http.routers.whoami.rule=Host(`whoami.shackofnoreturn.com`)"
         # Expose Whoami on the HTTPS entrypoint
         - "traefik.http.routers.whoami.entrypoints=websecure"
         # Enable TLS
