@@ -6,9 +6,9 @@ networks:
   traefik-development:
     external: true
 
-configs:
-  traefik_dynamic_tls:
-    external: true
+# configs:
+#   traefik_dynamic_tls:
+#     external: true
 
 secrets:
   cloudflare_api_token:
@@ -46,9 +46,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - traefik:/certs
 
-    configs:
-      - source: traefik_dynamic_tls
-        target: /etc/traefik/dynamic/tls.yml
+    # configs:
+    #   - source: traefik_dynamic_tls
+    #     target: /etc/traefik/dynamic/tls.yml
 
     # Traefik Static configuration via command-line arguments
     command:
